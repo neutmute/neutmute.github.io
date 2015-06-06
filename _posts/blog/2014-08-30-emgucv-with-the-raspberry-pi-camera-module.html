@@ -1,0 +1,73 @@
+---
+layout: post
+title: EmguCV with the Raspberry Pi Camera Module
+date: 2014-08-30 17:21:43.000000000 +10:00
+categories:
+- blog
+- lego
+- opencv
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_facebook: '1'
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _oembed_93a05a941f55607ff4fa48214a9ef244: "{{unknown}}"
+  _oembed_a279891992b9586d5f878b897df2cc43: "{{unknown}}"
+  _oembed_7f652405fdca8e4cb410cd78ec51e80e: "{{unknown}}"
+  _edit_last: '1'
+excerpt: Accessing the Raspberry Pi Camera from C#
+---
+<p>In the <a href="/2014/08/28/emgucv-on-the-raspberry-pi-with-mono/">last post</a>, I documented how to compile EmguCV on Raspbian and get a USB camera running with the standard Emgu example code. The performance of the USB camera is unsatisfactory however and the better option is to get the <a href="http://www.raspberrypi.org/product/camera-module/">Raspberry Pi Camera Module</a> hooked into EmguCV to take advantage of the GPU.</p>
+<h2>Prerequisites</h2>
+<p>The following assumes:</p>
+<ol>
+<li>You have <a href="/2014/08/28/emgucv-on-the-raspberry-pi-with-mono/">EmguCV compiled</a> on Raspbian. Instructions below assume at ~/emgucv.</li>
+<li>You have EmguCV <a href="http://www.emgu.com/wiki/index.php/Download_And_Installation#Building_from_Git">compiled from source</a> on Windows. It will be simpler later if you clone into a folder named <strong>emgucv-source</strong> which is a sibling folder to PiCamCV. Compiling EmguCV from source can be tricky if you don't follow Emgu's instructions to the letter, so read <a href="http://www.emgu.com/wiki/index.php/Download_And_Installation#Building_from_Git">their documentation</a> again.</li>
+<li>You have a USB camera attached to your Windows host.</li>
+<li>You have a Raspberry Pi with a camera module attached.</li>
+</ol>
+<h2>RaspiCamCV</h2>
+<p>As noted at the end of the last post, OpenCV and hence EmguCV cannot locate the Raspberry Pi camera by default. <a href="https://robidouille.wordpress.com/2013/10/19/raspberry-pi-camera-with-opencv/">Emil Valkov</a> has done some work to make a C library to expose the pi camera in a manner compatible with OpenCV. We will make use of that library to make the pi camera available to EmguCV.</p>
+<p>Emil's repo initially only produced a static library which EmguCV can't use. Clone <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">my fork</a> however, follow the instructions in the readme and the make file will automatically produce the shared library <strong>libraspicamcv.so</strong> for you.</p>
+<h2>PInvoke</h2>
+<p>Next, we need to create a c# assembly which PInvoke's the RaspiCamCV library. For this, see <a href="https://github.com/neutmute/PiCamCV/blob/master/source/LibPiCamCV/PInvoke/CvInvokeRaspiCamCV.cs">CvInvokeRaspiCamCV.cs</a>, a snippet of which looks like this:</p>
+<p><code>[DllImport(OpencvRaspiCamCVLibrary, EntryPoint=EntryPointCapture, CallingConvention = CvCallingConvention)]<br />
+public static extern IntPtr cvCreateCameraCapture(int index);
+</code></p>
+<p>This is all fairly straight forward. Note in the full source that I added a UNIX conditional compile time constant. This allows one to develop on Windows and test OpenCV with a USB camera before switching configuration, compiling for UNIX and directing the PInvoke to the <strong>raspicamcv</strong> library for running on the Pi.</p>
+<h2>Compiling on Windows</h2>
+<p>Let's convert Emil's simple <a href="https://github.com/robidouille/robidouille/blob/master/raspicam_cv/RaspiCamTest.c">raspicamtest.c</a> into C#. For that, see <a href="https://github.com/neutmute/PiCamCV/blob/master/source/Console/SimpleCv.cs">SimpleCv.cs.</a></p>
+<p>We now have all the basic building blocks for a simple test. So clone the <a href="https://github.com/neutmute/PiCamCV">PiCamCV </a>repository to your Windows OS.</p>
+<p>EmguCV looks for the unmanaged OpenCV dll's in <strong>x86</strong> and <strong>x64</strong> folders below the binary folder of the executing assembly. Edit the PiCamCV's <a href="https://github.com/neutmute/PiCamCV/blob/master/build/post_build_get_unmanaged.cmd">post_build_get_unmanaged.cmd</a> to point to your local Windows clone of EmguCV. This will copy the OpenCV dll's compiled by the EmguCV solution into PiCamCV's binary folder.</p>
+<p>Open PiCamCV's solution and run it in <strong>Debug</strong> configuration on your Windows host. With any luck you will see your USB connected camera open up in an OpenCV window.</p>
+<p>Now compile PiCamCV for <strong>UnixDebug</strong> and SCP the binary files onto your Pi at <strong>~/picamcv</strong>. <span style="color:#ff0000;">Be careful not to copy the Windows compiled emgucv binaries, these don't run on Linux. You need to use the Linux compiled versions (keep reading).</span></p>
+<h2>Running on the Raspberry Pi</h2>
+<p>SSH into your Pi</p>
+<p>Copy the <strong>libraspicamcv.so </strong>that you compiled in the RaspiCamCV step above into ~/picamcv:<br />
+<code>cp ~/robidouille/raspicam_cv/libraspicamcv.so ~/picamcv/</code></p>
+<p>Copy the <strong>opencv.so</strong> and <strong>emgu.CV.*</strong> files from the emgucv bin folder to the picamcv folder: <code>cp ~/emgucv/bin/*.* ~/picamcv</code></p>
+<p>Start up X Windows if you aren't already in it.</p>
+<p>From an X Window terminal, execute <code>mono picamconsole.exe</code><br />
+With any luck, your pi camera module will now be streaming into an OpenCV window!</p>
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/L0edGgYIjlc" frameborder="0" allowfullscreen></iframe>
+</p>
+<p>The CPU in the video is hitting 100% because it is running in VNC. Running over HDMI, it hits around 80%.</p>
+<h2>Note: Compiling EmguCV after RaspiCamCV</h2>
+<p>If you need to compile EmguCV after you have successfully compiled RaspiCamCV, it won't work. RaspiCamCV's instructions caused apt-get to install opencv-dev libraries which interfere with the EmguCV make.</p>
+<p>To fix this:<br />
+<code>
+sudo apt-get remove libcv-dev libhighgui-dev
+</code><br />
+I also ran <span style="color:#ff0000;">sudo apt-get autoremove</span> but I think this was a mistake as I then had to repair some problems with libgeotiff-dev by apt-get again and also reinstall libgdiplus. Not doing the autoremove seems to save the trouble.</p>
+<p>EmguCV will now compile again. To make RaspiCamCV you will need to redo it's recommended sudo apt-get lines.</p>

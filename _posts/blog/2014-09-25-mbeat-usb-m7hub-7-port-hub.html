@@ -1,0 +1,67 @@
+---
+layout: post
+title: MBeat USB-M7HUB 7 port hub
+date: 2014-09-25 21:44:27.000000000 +10:00
+categories:
+- blog
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_facebook: '1'
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: Evaluating the MBeat USB-M7HUB 7 port hub for the Raspberry Pi 
+---
+<p>The Raspberry Pi is often not able to supply enough power to USB peripherals through it's own power supply and a USB hub is recommended to ensure power drops don't cause problems in the processor.</p>
+
+<p>
+<img src="/assets/img/blog/pipower2.png" alt="Dual Power Setup" width="300" height="270" />
+
+</p>
+<p>This means you will need two plug packs. One to power the Pi and one to Power the hub. The setup is illustrated in the diagram to the left. Red lines represent the power lines, the blue line the USB type B connector which is expanding the USB ports available to the Pi.</p>
+<p>For such a small form factor device it isn't elegant to require so many big power connectors for a project.</p>
+<p>
+<img src="/assets/img/blog/pipower3.png" alt="Single plug pack setup" width="300" height="270" /></p>
+
+<p>One way to eliminate the multiple plug packs is to power the Pi from the USB hub itself - as illustrated in the diagram to the right.</p>
+<p>This isn't straight forward however as the USB hub needs some design features so as to make this a safe operation for the Pi which could otherwise be damaged.</p>
+<p>This <a href="http://elinux.org/RPi_Powered_USB_Hubs">eLinux.org page</a> is dedicated to Raspberry Pi hubs and describes how to test your USB hub for this feature and so I set about testing my $17 MBeat USB-M7HUB 7 port hub. I had already been using this hub to power my Pi as it was doing better than a cheap 5V wall plug that let the Pi crash under load. In the same conditions, the MBeat hub kept the Pi running fine. I wanted to see if I could use it to power the Pi and use it as a hub for the Pi at the same time.</p>
+<p>First, I acquired some 10W resistors for the test. The eLinux page specifies 50 and 5 ohm resistors, I figured these would be near enough.</p>
+<p>
+
+<img src="/assets/img/blog/10wresistor.jpg" alt="10W resistors" width="660" height="305" /></p>
+
+<p>Next bit of equipment I didn't have but managed to source was a USB Tester which conveniently exposes test points in the circuit for connecting a multimeter to measure current and voltage.</p>
+<p>
+<img src="/assets/img/blog/usbtester.jpg" alt="USB tester" width="660" height="172" />
+</p>
+<p>With all equipment sourced I was able to carry out the eLinux tests:</p>
+<p><strong>Output power</strong></p>
+<p>Without load, the voltage from the hub supply gave 5.2V. With the 5.6 ohm load resistor in place, the voltage across the load measured 4.8V. This just met the requirement of 4.75V as specified by eLinux.org. As a side note that resistor got uncomfortably warm to the touch after being in circuit.</p>
+<p><strong>Backfeed diode Test</strong></p>
+<p>In this test with the 56ohm resistor I measured 5.05V across the miniB connector and 4.99V across the resistor, giving a 0.05V drop. Elinux.org expects a 0.4V drop for a properly designed circuit which would indicate the presence of a diode protecting against back power leaks.</p>
+<p><strong>Tear down</strong></p>
+<p>It was pointed out on a forum that absence of evidence is not evidence of absence since a <a href="http://www.maximintegrated.com/en/app-notes/index.mvp/id/636">MOSFET could be used</a> for reverse current protection without the characteristic diode voltage drop. Given it was a $17 hub I didn't have high hopes but pulling the thing open and having a look should solve this question decisively.</p>
+<p>Here is the top view of the PCB where we can see some capacictors, two crystals to clock the IC's we will see on the underside and an LED...a diode yes but not a back feed protecting diode.</p>
+<p>
+<img src="/assets/img/blog/mbeatinside.jpg" alt="Top side USB-M7HUB" width="660" height="450" /></p>
+<p>
+<img src="/assets/img/blog/mbeatmacro.jpg" alt="7PORT-FE11S-28PIN" width="660" height="248" /></p>
+<p>Flipping it over...</p>
+<p>
+<img src="/assets/img/blog/mbeatunder.jpg?w=660" alt=" Underside of the MBeat USB-M7HUB" width="660" height="407" /></p>
+<p>Here we can see surface mount resistors and capacitors but no diodes or MOSFETs. There are two FE1.1s USB hub ICs which according to the datasheet is "a highly integrated, high quality, high performance, low power consumption, yet low cost solution for USB 2.0 High Speed 4-Port Hub"</p>
+<p>
+<img src="/assets/img/blog/fe11s.jpg" alt="FE1.1s block diagram" width="450" height="472" /></p>
+
+<p>The datasheet doesn't give any indication of back power protection, so I think it is safe to say that it isn't wise to try power the Raspberry Pi from this hub while simultaneously using it as a hub so I'll probably continue to power the Pi from this MBeat device and use my monitor's built in USB hub connected to the Pi to play around with USB devices that need that extra bit of juice.</p>

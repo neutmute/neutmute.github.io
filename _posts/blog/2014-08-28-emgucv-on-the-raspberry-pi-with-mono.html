@@ -1,0 +1,107 @@
+---
+layout: post
+title: EmguCV on the Raspberry Pi with Mono
+date: 2014-08-28 22:08:02.000000000 +10:00
+categories:
+- blog
+- opencv
+- raspberry pi
+tags:
+- emgucv
+- mono
+- opencv
+- pi
+- raspberrypi
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_facebook: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  geo_public: '0'
+  _publicize_pending: '1'
+  _edit_last: '1'
+excerpt: First steps in executing C# and OpenCV on the Raspberry Pi
+---
+<p>These are my notes on getting <a href="http://opencv.org/">OpenCV</a> working on the raspberry pi with mono. In order to use OpenCV with C#, we will use <a href="http://www.emgu.com/wiki/index.php/Main_Page">EmguCV</a> which is an open source C#  wrapper for the OpenCV C++ libraries. I'll add a disclaimer that I'm not claiming these hacks below are the most elegant way to get EmguCV compiled on Raspbian, it is just the path I took to determine if it was even at all possible - which it is - keep reading!</p>
+<h4><span style="color:#ff0000;">UPDATE January 2015</span>: See <a href="/2015/01/22/emgucv-on-the-raspberry-pi-with-mono-2/">these newer instructions</a></h4>
+<h1>Prerequisites</h1>
+<p>These steps assume Raspbian Wheezy with hard float and a recent version of mono. Mono on my pi is compiled from source at version <code>3.2.7 (master/d7ce227 Monday 23 December 21:49:08 EST 2013).</code><br />
+The emgu git repository was cloned from <code>commit e73c06e71b7e1628c54ec1165409367665721a8a, Date: Mon Aug 4 12:54:23 2014 -0400</code>. The EmguCV master branch is actively being worked on so some of these instructions may already be out of date at the time of writing.</p>
+<h1>Download EmguCV and compile</h1>
+<p>Wheezy and Ubuntu are both based off Debian, so head to the <a href="http://www.emgu.com/wiki/index.php/Download_And_Installation#Ubuntu_14.04">EmguCV website</a> and follow the instructions for Ubuntu. It won't work without some changes so read on.</p>
+<p>The first problem you will hit is that the list of <strong>apt-get</strong> prerequisite packages will fail. Thread building blocks library <strong>libtbb-dev</strong> is not available for armhf in Wheezy. <a href="https://packages.debian.org/search?keywords=libtbb-dev">It will be available</a> in Jessy. We will work around this so skip over this error by removing libtbb-dev from the install list and try again.</p>
+<p>Go ahead and clone the emgucv repo as per EmguCV instructions. These are the easiest steps of the whole procedure so don't get cocky yet.</p>
+<p>When you get to the <strong>cmake</strong> step, you will need to use this command line rather than the specified Ubuntu one</p>
+<p><code> cmake -DBUILD_TESTS:BOOL=FALSE -DBUILD_DOCS:BOOL=FALSE -DEMGU_CV_WITH_TIFF:BOOL=FALSE -DWITH_TBB:BOOL=FALSE -DWITH_CUDA:BOOL=FALSE -DWITH_OPENCL:BOOL=FALSE -DWITH_IPP:BOOL=FALSE -DWITH_EIGEN:BOOL=FALSE</code></p>
+<p>The options listed below were changed / added to set them to FALSE.</p>
+<ul>
+<li><strong>EMGUCV_WITH_TIFF</strong> Further along I was having trouble with this library. Turning it off helped get me past it.</li>
+<li><strong>WITH_TBB</strong> As noted above, libtbb-dev is not available on the armhf debian platform.</li>
+<li><strong>WITH_IPP</strong> Turning this off also solved some problems with make.</li>
+<li><strong>WITH_EIGEN</strong> Turning this off solved some problems with missing resources</li>
+</ul>
+<p>With this configuration for CMake, you will get to about 89% through <strong>make</strong> when something like the following might happen:</p>
+<div>
+<pre><span style="color:#ff0000;">[ 89%] Building CXX object opencv/modules/python/CMakeFiles/opencv_python.dir/sr c2/cv2.cpp.o
+ c++: internal compiler error: Killed (program cc1plus)
+ Please submit a full bug report,
+ with preprocessed source if appropriate.
+ See &lt;file:///usr/share/doc/gcc-4.6/README.Bugs&gt; for instructions.
+ make[2]: *** [opencv/modules/python/CMakeFiles/opencv_python.dir/src2/cv2.cpp.o] Error 4
+ make[1]: *** [opencv/modules/python/CMakeFiles/opencv_python.dir/all] Error 2
+ make: *** [all] Error 2 </span></pre>
+</div>
+<p>Whatever the problem was, I didn't plan on using the Python OpenCV bindings so I went ahead and deleted anything that looked CMake related from the<code> opencv/modules/python/</code> tree. Onward.</p>
+<p>After a new make make command, the next roadblock:</p>
+<pre><span style="color:#ff0000;">[ 91%] Building CXX object Emgu.CV.Extern/CMakeFiles/cvextern.dir/emgu_c.cpp.o</span>
+<span style="color:#ff0000;">In file included from /home/pi/emgucv/Emgu.CV.Extern/emgu_c.cpp:7:0:</span>
+<span style="color:#ff0000;">/home/pi/emgucv/Emgu.CV.Extern/emgu_c.h:13:37: fatal error: opencv2/text/erfilter.hpp: No such file or directory</span>
+<span style="color:#ff0000;">compilation terminated.</span>
+<span style="color:#ff0000;">make[2]: *** [Emgu.CV.Extern/CMakeFiles/cvextern.dir/emgu_c.cpp.o] Error 1</span>
+<span style="color:#ff0000;">make[1]: *** [Emgu.CV.Extern/CMakeFiles/cvextern.dir/all] Error 2</span>
+<span style="color:#ff0000;">make: *** [all] Error 2
+</span></pre>
+<p>I solved this by finding where that missing file was:<br />
+<code>find . -name 'erfilter.hpp'</code><br />
+and copying it into the same folder as emgu_c.cpp.</p>
+<p>Next up:</p>
+<pre><span style="color:#ff0000;">[100%] Building CXX object tests/cvextern_test/CMakeFiles/cvextern_test.dir/cvextern_test.cpp.o</span>
+<span style="color:#ff0000;">Linking CXX executable ../../bin/cvextern_test</span>
+<span style="color:#ff0000;">/usr/bin/ld: warning: libtiff.so.4, needed by /usr/lib/liblept.so.3, may conflict with libtiff.so.5</span>
+<span style="color:#ff0000;">../../bin/libcvextern.so: undefined reference to `cv::text::ERStat::ERStat(int, int, int, int)'</span>
+<span style="color:#ff0000;">collect2: ld returned 1 exit status</span>
+<span style="color:#ff0000;">make[2]: *** [bin/cvextern_test] Error 1</span>
+<span style="color:#ff0000;">make[1]: *** [tests/cvextern_test/CMakeFiles/cvextern_test.dir/all] Error 2</span>
+<span style="color:#ff0000;">make: *** [all] Error 2</span></pre>
+<div>
+<p>At this stage I was getting good at removing code willy nilly, so wherever I found a reference to <strong>cvextern_test</strong> in a <strong>CMakelist.txt</strong> file, I chopped it out.</p>
+<div></div>
+<div>The make is reporting 100% as you can see above but there still a few more hurdles to clear:</div>
+<pre><span style="color:#ff0000;">/home/pi/emgucv/Emgu.CV/PInvoke/Unity/TextureConvert.cs(6,7): error CS0246: The type or namespace name `UnityEngine' could not be found. Are you missing an assembly reference?</span>
+<span style="color:#ff0000;">/home/pi/emgucv/Emgu.CV/PInvoke/Unity/TextureConvert.cs(20,76): error CS0246: The type or namespace name `Texture2D' could not be found. Are you missing an assembly reference?</span>
+<span style="color:#ff0000;">/home/pi/emgucv/Emgu.CV/PInvoke/Unity/TextureConvert.cs(42,21): error CS0246: The type or namespace name `Texture2D' could not be found. Are you missing an assembly reference?</span>
+<span style="color:#ff0000;">Compilation failed: 3 error(s), 0 warnings</span>
+<span style="color:#ff0000;">make[2]: *** [Emgu.CV] Error 1</span>
+<span style="color:#ff0000;">make[1]: *** [Emgu.CV/CMakeFiles/Emgu.CV.dir/all] Error 2</span>
+<span style="color:#ff0000;">make: *** [all] Error 2</span></pre>
+</div>
+<p>All this code looks Android related and I hope I won't need TextConvert.cs because I hacked the methods to replace their defintions with <code>throw new NotImplementedException()</code>. That let me remove the using statements which were causing these problems.</p>
+<p>Almost at the finish line, I had some errors compiling the examples. I had these errors on my Windows build too and since they are only examples, out comes the knife:</p>
+<pre>cd Emgu.CV.Example
+rm -r SURFFeature
+rm -r LatentSvmDetector
+rm -r TrafficSignRecognition</pre>
+<p>Finally, you should have successfully compiled the EmguCV C# libraries on your raspberry pi!</p>
+<p>Plug a USB web cam in, cd into the <strong>bin</strong> folder and in an X Window session, execute:</p>
+<p><code>mono Example.CameraCapture.monoexe</code></p>
+<p>
+<img src="/assets/img/blog/emgucv-usb.png?w=625" alt="emgucv-usb" width="625" height="577" />
+</p>
+<p>Woohoo! Except this screenshot hides the inconvenient truth that rather than measuring the camera speed in frames per second, you need to measure in seconds per frame while the CPU churns at 100%. Of course, running X-Windows via VNC doesn't help but essentially, the pi SoC is not powerful enough to do OpenCV work with a USB camera.</p>
+<p>Hang on you say, the <a href="http://www.raspberrypi.org/documentation/usage/camera/README.md">raspberry pi camera module</a> uses the GPU to take full HD 1080p photo and video and can be controlled programmatically! The catch being that because this is a custom board for the pi, OpenCV and hence EmguCV can't see this non usb camera.</p>
+<p>The <a href="/2014/08/30/emgucv-with-the-raspberry-pi-camera-module/">next post</a> takes care of this problem.</p>

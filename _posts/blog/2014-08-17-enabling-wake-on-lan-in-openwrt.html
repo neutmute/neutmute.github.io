@@ -1,0 +1,67 @@
+---
+layout: post
+title: Enabling Wake on LAN in OpenWRT
+date: 2014-08-17 23:05:22.000000000 +10:00
+categories:
+- wrt
+- blog
+tags:
+- luci
+- openwrt
+- wake on lan
+- wol
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_facebook: '1'
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  geo_public: '0'
+  _edit_last: '1'
+author:
+excerpt: How to use Wake On Lan from an OpenWRT router
+---
+<p>When I switched from DD-WRT to OpenWrt on my TL-WR1043ND router, I couldn't find a WOL page in the UI. Here is how to enable it:</p>
+<p>Go to the <strong>System, Software</strong> menu, search for the <strong>luci-app-wol</strong> package and install it...</p>
+<p>
+<img  src="/assets/img/blog/wol.png" alt="wol" width="623" height="691" />
+</p><p>
+ Be sure to click the "Available packages" tab</p>
+<p>..and you are done. Too easy! Not quite.</p>
+<p>The new <strong>Network, Wake on LAN</strong> menu item relies on arp tables to present you with the list of devices to wake up. There are some problems though:</p>
+
+<ul class="list-group">
+<li class="list-group-item">If OpenWRT hasn't seen the device yet, it won't be on the list. If the device hasn't been seen for a while, the arp table clears and your host drops off the list.</li>
+<li class="list-group-item">You also need to populate the hosts file if you want hostnames rather than IP/MAC address pairs to choose from in your WOL dropdown.</li>
+</ul>
+
+<p>To work around the arp expiring you can use <code>ip neigh add</code> but you still have to update the hosts file. Instead, I decided to edit the LuCI UI code directly to hardcode in my devices.</p>
+<p>The source for the WOL page is <a href="http://luci.subsignal.org/trac/browser/luci/trunk/applications/luci-wol/luasrc/model/cbi/wol.lua">fairly simple</a> and can be found in your router at <code>/usr/lib/lua/luci/model/cbi/wol.lua</code></p>
+<p>At lines 56-58 (as at revision 10467), you want to comment out the loop where it calls <code>sys.net.mac_hints</code> and replace it with something like this which has your hard coded MAC and hostnames:</p>
+<p>
+
+{% highlight lua %}
+--sys.net.mac_hints(function(mac, name)
+-- host:value(mac, "%s (%s)" %{ mac, name })
+host:value("FF:EE:DD:C1:BA:AD", "FirstPC")
+host:value("FF:EE:DD:C2:1C:C0", "SecondPC")
+host:value("FF:EE:DD:C3:1F:E1", "HTPC")
+--end)
+{% endhighlight %}
+
+</p>
+<p>Save your changes, revisit the menu <strong>Network, Wake on LAN</strong> and OpenWRT will now present a clean list of hostnames that it won't forget when the ARP table clears.</p>
+<p><img src="/assets/img/blog/wol-done.png" alt="wol-done" width="678" height="358" /></p>
+<p><strong>Command Line Interface</strong></p>
+<p>If one day you find that you can SSH to your router but can't access the UI (I'm looking at you corporate firewall) then you can fallback to the CLI interface by executing...</p>
+<pre><span style="color: #0000ff;">/usr/bin/etherwake -D "FF:EE:DD:C3:1F:E1"</span></pre>
+<p>The <strong>-D</strong> parameter increases the debug level to stdout. Without it, the command runs silently.</p>
+<p>If you don't want to keep a list of MAC Addresses somewhere, create a script<strong> wakeHtpc.sh</strong> and add your etherwake command to it.</p>
+<p>Run <strong>chmod +x wakeHtpc.sh</strong> over it to allow execution and then run it with <strong>./wakeHtpc.sh</strong></p>
