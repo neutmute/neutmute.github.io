@@ -1,0 +1,53 @@
+---
+layout: post
+title: Building a Lego Marble Pump
+date: 2014-09-30 23:11:48.000000000 +10:00
+categories:
+- blog
+- lego
+tags:
+- gbc
+- Lego
+- pump
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_facebook: '1'
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: Constructing a Lego marble pump
+---
+<p>After I made my ping pong ball thrower, a friend sent me a link to some <a href="https://www.youtube.com/watch?v=sUtS52lqL5w">Lego Great Ball Contraption</a> videos. Particularly the ones by <a href="https://www.youtube.com/channel/UCCJJNQIhS15ypcHqDfEPNXg">akiyuki</a>, they are nothing short of mind blowing the amount of skill and engineering that has gone into them which I can appreciate even more after the ping pong thrower build.</p>
+<p>I thought I'd have a go at making a mini GBC but after researching how to source those official Lego balls and disovering their exorbitant cost - selling for $1-$5 per ball (!) on eBay, I found some forum posts that indicated 14mm craft beads from China are a suitable replacement. I soon had a bag of 50 shipping over from Shenzen for less than $5 total.</p>
+<p>For a while, they laid there while I tried to think of how to integrate something with the Pi but eventually I decided that whatever I did it would probably include some sort of a downhill marble race. This would then require a mechanism to cycle the marbles to the top of the race for them to begin their descent. I decided on trying to replicate a marble pump. This post describes that effort.</p>
+
+<img src="/assets/img/blog/pumpPrinciple.gif" alt="" width="56" height="71" />
+
+<p>Researching marble pump designs, I found this <a href="http://bricks.stackexchange.com/questions/725/how-can-i-build-a-lego-marble-pump">stack exchange post </a>which details a couple of techniques. The rotating piston as depicted to the left seemed like the most feasible to pull off. A piston moves in a circular motion, opening a gap in the intake for a ball to fall in before sliding across and rising up to pump the ball up the chimney. A surrounding slide mechanism is push / pulled by the piston to open and close the intake and outlet. A subtle feature depicted in the gif is the wedge at the top of the ball chimney. The wedge biases the ball to fall out in the desired direction.</p>
+<p><img src="/assets/img/blog/pump1.jpg" alt="44 tooth gear and piston" width="300" height="157" /></p>
+<p>After a lot of building, tweaking and rereading the stack exchange post, I came up with a working model. A lot of refinement and work went into getting the piston alignment just right. I tuned the alignment by using a 2 hole, 2x1 brick. It was only later I realised I needed to pay attention to both the left/right peg hole in the piston as well as the left/right hole in the 40 tooth gear.</p>
+<p>Taking a leaf from the Lego house sets, I made it easy to disassemble by using tile pieces along the seam between the white pump base and the red ball hopper/chimney section, leaving only a few studded pieces to hold it together. Using studless tiles reduces the amount of friction connecting the two sections and so it requires less force to pull apart and therefore less likely to breakup in a non controlled manner.</p>
+<p><img src="/assets/img/blog/pump4.jpg" alt="Marble Pump V1" width="660" height="495" /></p>
+<p>The large transparent window pieces from my son's <a href="http://brickset.com/sets/7208-1/Fire-Station">7208 Firestation set</a> came in handy to show off the inner workings as well as the 4 brick tall 2x1 pieces for the chimney. In the end though, the easy-to-pull-apart feature also made the model susceptible to tearing itself apart while pumping balls so after getting the base details right, I replaced the tiled seams with full studs.</p>
+<p><img src="/assets/img/blog/pump3.jpg" alt="mini wedget to bias the ball to fall out toward slide" width="148" height="150" /></p>
+
+<p>The other part of the pump that tended to break itself apart was the slide mechanism with the bricks lifting off the base plate. I reinforced the slide by making the fore and aft sections longer to give it more sticking strength to the plate.</p>
+<p>Then there were friction problems with the mechanism sliding nicely with the chimney and hopper removed, but then binding up and sticking when the chimney was set in place and pulling the walls together. This was helped a little by using cupboard and window pieces in the slide to reduce surface contact with the outer walls. In the end, after careful examination I found a lot of the problem was due to using battleworn bricks that had been nicked and deformed from drops on the floor. Some deformations are circled in green in the picture and can be seen if you click the image to get an enlarged view. Replacing the damaged bricks improved the stickyness quite a lot.</p>
+<p><img src="/assets/img/blog/pump5.png" alt="Marble Pump v2" width="660" height="487" /></p>
+<p><img src="/assets/img/blog/pump6.jpg" alt="Ball feed" width="124" height="300" /></p>
+<p>The ball feed also presented a some challenges with the balls getting interlocked and not dropping down into the intake. This was solved by ensuring the blue down wedges were not horizontally opposed and instead were placed at different heights. Initial builds had the hopper wider for more capacity but the bottom of the intake needed to stay narrow to ensure a clean drop down for the next ball.</p>
+<p>Careful tuning of the yellow gradient section on the rear of the slide was also required to ensure the balls wanted to roll down toward the intake. Too steep a gradient resulted in the balls jamming the slide such that it couldn't move. Too little and they would loiter in the hopper without feeding into the intake.</p>
+<p><img src="/assets/img/blog/pump7.jpg" alt="" width="300" height="191" /></p>
+<p>Binding up of the slide mechanism also eventually led to the removal of most of the red technic beams on the rear side of the pump. I had them there originally to allow more light to pass through and illuminate the viewing window on the other side but deduced that the peg connecting the piston to the 40 tooth gear wheel was possibly snagging in the holes so they all got replaced with standard beams in later revisions.</p>
+<p class="wp-image-229 size-thumbnail">I didn't track how many hours this build took in the end but it was done over about 3 weekends and only put me in greater awe of the minutae required to build reliable GBC machines. Below is a video of the pump in operation, driven by a 9V Technic motor.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/DJAuZPA_luw" frameborder="0" allowfullscreen></iframe></p>
+<p>Oh and for some reason out of all the sets he could have chosen, mini-me decided he wanted to rebuild his 7208 Firestation from scratch again and for a time was perplexed as to why he couldn't find all the critical pieces in the Lego pool. The look on his face was priceless when the penny dropped and he realised Dad's marble pump had consumed many of them. Luckily there is a standing house rule where existing model's cannot be cannibilised without the builders permission...which was of course denied :)</p>
+<p><img src="/assets/img/blog/pump8.jpg" alt="7208 Firestation rebuilt missing a few pieces" width="660" height="427" /></p>
