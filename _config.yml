@@ -1,4 +1,5 @@
 ### GENERAL SETTINGS ###
+highlighter: pygments
 
 # Site settings
 title: turbine51.net
