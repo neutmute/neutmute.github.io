@@ -1,0 +1,33 @@
+---
+layout: post
+title: Raspberry Pi Lego Alarm Clock
+date: 2014-10-01 23:03:29.000000000 +10:00
+categories:
+- blog
+- raspberry pi
+tags:
+- clock
+- Lego
+- pwm
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_facebook: '1'
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: A Raspberry Pi Lego Alarm Clock
+---
+<img src="/assets/img/blog/christmas-bells.jpg" alt="christmas-bells" width="150" height="123" />
+<p>Last Christmas my son had some bells lying around and one day said "Dad, I want these to wake me up in the morning". Fresh from completing the <a href="http://spacerazor.wordpress.com/2014/09/29/controlling-motors-on-the-raspberry-pi-with-pwm/">Ping Pong Ball Thrower</a> (tm), I knew exactly how to solve the problem.</p>
+<p>It was a straight forward build with the only hitch that I wanted to use the c# 5.0 async and await which weren't available in the default mono rpm's on Raspbian at the time. Compiling mono from source on the Pi sorted that out.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/9teKFaHFG9Q" frameborder="0" allowfullscreen></iframe></p>
+<p>The experiment with the generic 3V motor tied down with rubber bands didn't go so well since the connecting axle didn't align exactly with the technic beam it was inserted through and it showed signs of wear after a few runs. As the axle heated up from friction it also seemed to bind up more and slow the motor down. Swapping in a proper 9V Technic motor fixed this.</p>
+<p>The source code for the alarm clode is on <a href="https://github.com/neutmute/RPi.Demo/blob/master/src/RPi.Console/Alarm/AlarmClock.cs">github</a>, The console app does a few other things like run the ping pong thrower, you just need to pass the correct <a href="https://github.com/neutmute/RPi.Demo/blob/master/src/RPi.Console/AppOptions.cs">command line parameter</a>.</p>
