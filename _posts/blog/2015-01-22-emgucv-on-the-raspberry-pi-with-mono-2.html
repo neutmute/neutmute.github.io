@@ -1,0 +1,60 @@
+---
+layout: post
+title: 'EmguCV on the Raspberry Pi with Mono #2'
+date: 2015-01-22 20:51:19.000000000 +11:00
+categories:
+- blog
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _rest_api_published: '1'
+  _publicize_pending: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: EmguCV on the Raspberry Pi
+---
+<p>In <a title="EmguCV on the Raspberry Pi with Mono" href="/2014/08/28/emgucv-on-the-raspberry-pi-with-mono/">September 2014</a>, I documented how to compile EmguCV on the Raspberry Pi. At the time I didn't even know if it would work and so hacked away removing code and compile errors until it finally compiled.</p>
+<p>My old Pi died before Christmas and the model B replacement needed a new compile of EmguCV. Here is how I did it this time, in a more refined manner.</p>
+<h2>Install Mono</h2>
+<p>This time I compiled mono 3.12.0 from a <a href="http://www.mono-project.com/docs/compiling-mono/compiling-from-tarball/">tarball download</a>. The <a href="http://www.mono-project.com/docs/getting-started/install/linux/">sudo apt-get upgrade</a> method for Debian didn't work on the pi with 'you have held broken packages' errors. I added an export to ~/.profile to make the path to the mono bin folder persist through reboots.</p>
+<h2>Compile EmguCV</h2>
+<p><strong><span style="color: #ff6600;">Update April 2015: <a href="/2015/04/21/emgucv-on-the-raspberry-pi-with-mono-3/">See these newer instructions</a></span></strong></p>
+<p>This time I used <a href="http://sourceforge.net/p/emgucv/opencv/ci/master/tree/">EmguCV master</a> from commit 0a47c32492c336cedecdc191459956f67ad64edc from January 15 2015.</p>
+<p>As before, this is documenting deviations from the <a href="http://www.emgu.com/wiki/index.php/Download_And_Installation#Ubuntu_14.04">Ubuntu 14.04 compile</a> instructions.</p>
+<p>The first deviation is to cmake in which we turn a few extra things off in the compile.</p>
+<pre>cmake -DBUILD_TESTS:BOOL=FALSE -DBUILD_DOCS:BOOL=FALSE -DEMGU_CV_WITH_TIFF:BOOL=FALSE -DWITH_TBB:BOOL=FALSE -DWITH_CUDA:BOOL=FALSE -DWITH_OPENCL:BOOL=FALSE -DWITH_IPP:BOOL=FALSE -DWITH_EIGEN:BOOL=FALSE -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE -DBUILD_PERF_TESTS:BOOL=FALSE</pre>
+<p>After cmake is configured, <strong>make</strong> is executed and after some time this error happened:</p>
+<pre>In file included from /home/pi/emgucv/Emgu.CV.Extern/vector_ERStat.cpp:10:0:
+/home/pi/emgucv/Emgu.CV.Extern/vector_ERStat.h:17:37: fatal error: opencv2/text/erfilter.hpp: No such file or directory
+compilation terminated.
+Emgu.CV.Extern/CMakeFiles/cvextern.dir/build.make:701: recipe for target 'Emgu.CV.Extern/CMakeFiles/cvextern.dir/vector_ERStat.cpp.o' failed
+make[2]: *** [Emgu.CV.Extern/CMakeFiles/cvextern.dir/vector_ERStat.cpp.o] Error 1
+CMakeFiles/Makefile2:4468: recipe for target 'Emgu.CV.Extern/CMakeFiles/cvextern.dir/all' failed
+make[1]: *** [Emgu.CV.Extern/CMakeFiles/cvextern.dir/all] Error 2
+Makefile:146: recipe for target 'all' failed
+make: *** [all] Error 2</pre>
+<p>The fix was</p>
+<pre>mkdir -p ./Emgu.CV.Extern/opencv2/text
+cp ./opencv_contrib/modules/text/include/opencv2/text/erfilter.hpp ./Emgu.CV.Extern/opencv2/text
+</pre>
+<p>After that, there was only one more error.</p>
+<pre>Linking CXX shared library ../bin/libcvextern.so
+[100%] Built target cvextern
+Linking CXX executable ../../bin/cvextern_test
+../../bin/libcvextern.so: undefined reference to `cv::text::ERStat::ERStat(int, int, int, int)'
+collect2: ld returned 1 exit status
+tests/cvextern_test/CMakeFiles/cvextern_test.dir/build.make:115: recipe for target 'bin/cvextern_test' failed
+make[2]: *** [bin/cvextern_test] Error 1
+CMakeFiles/Makefile2:3288: recipe for target 'tests/cvextern_test/CMakeFiles/cvextern_test.dir/all' failed
+make[1]: *** [tests/cvextern_test/CMakeFiles/cvextern_test.dir/all] Error 2
+Makefile:146: recipe for target 'all' failed
+make: *** [all] Error 2</pre>
+<p>Interestingly this is ERStat again. This time I removed these lines from the root CMakeLists.txt</p>
+<pre>IF(NOT (ANDROID OR IOS))
+ ENABLE_TESTING()
+ ADD_SUBDIRECTORY(tests/cvextern_test)
+ENDIF()</pre>
+<p>Run cmake and then make and EmguCV compiles successfully.</p>

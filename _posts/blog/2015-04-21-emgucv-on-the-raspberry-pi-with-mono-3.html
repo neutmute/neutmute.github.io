@@ -1,0 +1,26 @@
+---
+layout: post
+title: 'EmguCV on the Raspberry Pi with Mono #3'
+date: 2015-04-21 14:48:48.000000000 +10:00
+categories:
+- blog
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: Even more EmguCV on the Raspberry Pi
+---
+<p>It is getting even easier to build EmguCv and OpenCV for the Raspberry Pi. Recent commits to EmguCV have added build support for Raspbian. From commit [1fa5e56] I only had to follow the <a href="http://www.emgu.com/wiki/index.php/Download_And_Installation#Raspbian_.28Raspberry_Pi_2.29_2">EmguCV instructions</a> with a minor tweak.</p>
+<p>At near 100% complete compilation, there was an error</p>
+<pre><span style="color: #ff6600;">fatal error: opencv2/hal/defs.h: No such file or directory </span></pre>
+<p>which I solved with</p>
+<pre><span style="color: #339966;">mkdir ~/emgucv/opencv/modules/core/include/opencv2/core/opencv2/hal -p</span>
+
+<span style="color: #339966;">cp ~/emgucv/opencv/modules/hal/include/opencv2/hal/defs.h ~/emgucv/opencv/modules/core/include/opencv2/core/opencv2/hal</span></pre>
+<p>Note that EmguCV's CMAKE builds OpenCV with TBB=FALSE - disabling support for Intel's Thread Building Blocks. TBB isn't available on Raspian's ARM hard float Wheezy at the time of writing (via apt-get package management at least). I plan to get this going at some point though. Face detection in OpenCV uses the <a href="http://docs.opencv.org/modules/objdetect/doc/cascade_classification.html">detectMultiScale </a>method which should get a nice speed boost on the Raspberry Pi 2 when TBB is enabled.</p>

@@ -1,0 +1,30 @@
+---
+layout: post
+title: Mono WinForms with sudo
+date: 2015-04-21 15:19:57.000000000 +10:00
+categories:
+- blog
+- mono
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _publicize_pending: '1'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _edit_last: '1'
+excerpt: Getting WinForms to run under sudo
+---
+<p>When hacking away on my C#/mono projects on the Raspberry Pi, I find it handy to have a WinForms app to help debug/diagnose various conditions by having various knobs and dials I can tweak and experiment with.</p>
+<p><img src="/assets/img/blog/picamcv-win.png" alt="WinForms on the Raspberry Pi" width="660" height="389" /></p>
+<p>When using the i2c bus, the mono is required to run elevated with sudo. sudo works fine for console apps, but when running the WinForms app I got this error</p>
+<pre><span style="color:#ff0000;">Unhandled Exception:</span>
+<span style="color:#ff0000;">System.TypeInitializationException: An exception was thrown by the type initializer for System.Windows.Forms.XplatUI ---&gt; System.ArgumentNullException: Could not open display (X-Server required. Check your DISPLAY environment variable)</span>
+<span style="color:#ff0000;">Parameter name: Display</span></pre>
+<p>This presumably happens because the application is running under a different user context and it can't find the various UI environment variables.</p>
+<p>I eventually found the answer in <a href="http://linux.die.net/man/1/gksudo"><strong>gksudo</strong> </a>which is what one needs to use when wanting to run a GUI app elevated in X-Windows. So instead of</p>
+<pre><span style="color:#ff0000;">sudo mono picamcv.win.exe</span></pre>
+<p>I needed</p>
+<pre><span style="color:#339966;">gksudo mono picamcv.win.exe</span></pre>
+<p>Onward!</p>
