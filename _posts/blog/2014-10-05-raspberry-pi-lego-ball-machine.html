@@ -1,0 +1,180 @@
+---
+layout: post
+title: Raspberry Pi / Lego Ball Machine
+date: 2014-10-05 22:16:34.000000000 +11:00
+categories:
+- blog
+- lego
+- opencv
+- raspberry pi
+tags:
+- c#
+- emgucv
+- HSV
+- Lego
+- opencv
+- raspberry pi
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_google_plus: '1'
+  _wpas_skip_facebook: '1'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_tumblr: '1'
+  _wpas_skip_path: '1'
+  geo_public: '0'
+  _publicize_pending: '1'
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+excerpt: Building a marble sorter out of Lego and OpenCV
+---
+<p>In previous posts I detailed how to:</p>
+<ul>
+<li>Build a <a href="/2014/09/30/lego-marble-pump/">Lego marble pump</a></li>
+<li>Use C# and Pulse Width Modulation to <a href="/2014/09/29/controlling-motors-on-the-raspberry-pi-with-pwm/">control motors with the Raspberry Pi</a></li>
+<li>Use C# and <a href="/2014/08/30/emgucv-with-the-raspberry-pi-camera-module/">OpenCV with the Raspberry Pi Camera Module</a></li>
+</ul>
+<p>Each one of those projects are pretty interesting in their own right but what would be really cool is to combine them all together. So I did. Check it out - I recommend full screen.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/MWK55A0RH0U" frameborder="0" allowfullscreen></iframe></p>
+<p>The marble pump, motor control and basics of getting OpenCV to run on the Pi are covered in those prior posts. Here I will discuss details particular to this build. Source code for the project is available on <a href="https://github.com/neutmute/PiCamCV">GitHub. </a></p>
+<h2>Lego Build</h2>
+<h4>Marble Race</h4>
+<p><img src="/assets/img/blog/snotslide.jpg" alt="Marble race with inverted studs" width="225" height="300" /></p>
+<p>Initially, the marble race was built with studs face down. The bottom of Lego plates aren't perfectly smooth, but flat enough to allow a marble to run down them without having to find flat tile pieces for the whole length of the race. Upside down plates with their uneven bottom would also slow the ball speed down to give the Raspberry Pi more time to detect and react to a red coloured ball.</p>
+<p>This inverted plate technique worked well on the <a href="/2014/09/30/lego-marble-pump/">first marble race</a> where the balls didn't have to turn corners but when 90 degree turns were added, the balls would tend to get stuck as they didn't have enough energy to bounce around and find their way down the next chute.</p>
+<p>For the final section before the sweeper arm a (rare!) underside tile was placed in the landing spot to give the marble just enough of a starting boost to make it through the gate and onto the conveyor belt. Without that tile the marbles would land and often stop.</p>
+<p>
+<img src="/assets/img/blog/race.png" alt="Chimney exit with two 2x8 plates" width="121" height="150" />
+</p>
+<p>The chimney exit used a pair of inverted 2 x 8 plates. This was a deliberate improvement from a single 4x8 plate becase the seam between the two plates keeps the marble elevated off the uneven underside and velocity up for the first turn.</p>
+<p>
+<img src="/assets/img/blog/tiledslide.png" alt="Long path with tiles " width="147" height="300" />
+</p>
+<p>The long run down toward the final two corners was changed to stud-on-top with tiles, as without the speed boost of the flat tiles, the marbles weren't making it through the next turn. I could have increased the gradient but that would mean making a taller chimney and more force required to pump balls up the chimney. The 9V Technic motor driving the pump is from a Mindstorms Robotics Invention set, some 10 years old and the step down gear box that drives the axle is 20+ years old so I didn't want to over strain it.</p>
+<h4>Conveyor Belt</h4>
+<p>
+<img src="/assets/img/blog/conveyor.jpg" alt="Conveyor belt section" width="300" height="212" />
+</p>
+<p>The conveyor belt stage is built with the tracks from the old mindstorms set. The only trick to this section was mounting mini 2x1 wedges at the end of the belt to help guide the ball into a narrower range to drop from.</p>
+<p>A chain link drives the belt with a 1:1 ratio from the gearbox output. I wouldn't have minded stepping it down for more torque but was a bit short on chain link.</p>
+<h2 class="wp-image-272 size-medium">Servo Circuit</h2>
+<p>The circuit for controlling the servo is a PCA9685 PWM LED controller connected to the Raspberry Pi via I2C as detailed in <a href="/2014/09/29/controlling-motors-on-the-raspberry-pi-with-pwm/">this post</a>. 
+A 12V power pack is fed through a UBEC (a switch mode DC-DC regulator often used in model aircraft) to supply 5V to the servo PWM chip and the DC Motor that drives the marble pump and conveyor. The DC motor in this project is not under the control of the Pi and is wired direct to the power supply.</p>
+<p>
+<img class="wp-image-249 size-large" src="/assets/img/blog/servosorter_bb.png" alt="PWM breadboard diagram" width="660" height="336" />
+</p>
+<p>In the picture below, the 16 pin DIP on the right is an unused IC from the previous motor project.</p>
+<p>
+<img class="wp-image-250 size-large" src="/assets/img/blog/pwmcircuit.jpg" alt="Servo control circuit" width="660" height="475" />
+</p>
+<h2>Servo Lego Interface</h2>
+<p>The <a href="/2014/09/29/controlling-motors-on-the-raspberry-pi-with-pwm/">Ping Pong Thrower</a> used a large servo that was easily capable of snapping a Lego beam in half if it was commanded to move beyond the limits of the Lego it was attached to. This time I downsized for the more nimble HXT900. The ping pong project used some tie wire to bind the servo to the Lego beam, this time I dremelled out an old (<a href="http://brickset.com/sets/8035-1/Universal-Set">set 8035</a>!) Technic plate and trimmed down the HXT900 horn to fit inside it.</p>
+<p>
+<img class="wp-image-245 " src="/assets/img/blog/servohorn.jpg" alt="Technic beam after applying the dremel" width="299" height="181" /></p>
+<p><img src="/assets/img/blog/servohornglued.jpg" alt="Hybrid Lego horn ready some Humbrol poly cement" width="285" height="179" /></a> </p>
+<p><img class="wp-image-248 size-full" src="/assets/img/blog/servomounted.jpg" alt="Servo packed tight with cardboard" width="500" height="520" /></p>
+<p><img class="wp-image-247 size-large" src="/assets/img/blog/servomounted2.jpg" alt="Underside of servo &amp; swiper arm" width="660" height="443" /></p>
+<h2>Software</h2>
+<p>The software for the project is written in C# and runs under Mono on the Raspberry Pi. The main controller (<a href="https://github.com/neutmute/PiCamCV/blob/master/source/Console/Runners/ServoSort/ServoSorter.cs">view source</a>) is quite simple to understand, capturing frames from the camera, looking for red in the image and if detected, moving the servo arm to the required position until the red disappears. An interesting thing I had to implement was a debounce as the red ball would appear but then temporarily disappear as it hit the corner of the race and failed to meet minimum detection area. This resulted in the sweeper arm oscillating rapidly as it cycled from detected, not detected and detected again and some balls were getting batted out race. A six-and-out example can be seen at <a href="https://www.youtube.com/watch?v=MWK55A0RH0U&amp;feature=player_detailpage#t=206">3:31</a>, of the video.</p>
+<p>The keen observer <a href="https://github.com/neutmute/PiCamCV/blob/master/source/Console/Runners/ServoSort/ServoSorter.cs">will see</a> I bound the Z, X, C keys to flicking the servo to various positions. It is a fun game to send the undetected green balls down the race and use the keys to try and bat them on to the floor.</p>
+<h2>HSV Colour Values</h2>
+<p>The sorter works by detecting the red balls and ignoring the green. In order to program the detector, the WinForms project in the <a href="https://github.com/neutmute/PiCamCV">PiCamCV solution</a> is used to view a feed from the camera. The HSV colour sliders are dragged so as to create a tight range where only the ball appears white in the filtered view, indicating that all other colours are being filtered out. This can be seen at <a href="https://www.youtube.com/watch?v=MWK55A0RH0U&amp;feature=player_detailpage#t=123">2:07</a> of the video.</p>
+<p>A lot of readers will be familiar with RGB colour. The image captured from OpenCV is in RGB but the colour detector function works in HSV colour space - Hue Saturation Value. Read more about HSV on <a href="http://en.wikipedia.org/wiki/HSL_and_HSV">wikipedia</a>.</p>
+<p><img class="wp-image-278" src="/assets/img/blog/hsv.png" alt="HSV cylindrical coordinate system" width="254" height="191" /> </p>
+<p><img class="wp-image-279" src="/assets/img/blog/rgb.png" alt="RGB cubic coordinate system" width="233" height="193" /> </p>
+<p>The benefit of using HSV as a colour system is that it is more resilient to changes in ambient lighting than RGB, making it more robust for colour detection in the real world. The images below show this best. The top row is a sequence of photos of the 14mm plastic beads I'm using for marbles under different lighting conditions. The bottom row is the same image blurred in Paint.NET to help average out the values a little so that a random pixel sample should represent a loose average of the colour of the ball.</p>
+<p><img class="alignnone size-large wp-image-280" src="/assets/img/blog/ballhsv.jpg" alt="BallHsv" width="625" height="277" /></p>
+<table class="table table-striped">
+<tbody>
+<tr>
+<th>Colour Scheme</th>
+<th>Daylight</th>
+<th>Light bulb</th>
+<th>Low light</th>
+<th>Very low light</th>
+</tr>
+<tr>
+<td>RGB</td>
+<td>180, 23, 31</td>
+<td>149, 24, 26</td>
+<td>60, 11, 14</td>
+<td>5, 1, 2</td>
+</tr>
+<tr>
+<td>HSV</td>
+<td>356, 88, 70</td>
+<td>358, 86, 58</td>
+<td>356, 83, 24</td>
+<td>17, 72, 3</td>
+</tr>
+</tbody>
+</table>
+<p>The table above shows RGB and HSV values for a sampled pixel from the center of the ball in each lighting condition. See how in RGB representation, the values for each colour change significantly across the lighting conditions. Red samples at 180, 149, 60 and 5. For the same colour in HSV, <strong>Hue</strong> and <strong>Saturation</strong> are remarkably stable and it is only the the <strong>Value</strong> that is changing.</p>
+<h3>OpenCV InRange</h3>
+<p>The magic of the ball detection is done using OpenCV's InRange function. The core of the c# code is reproduced below from <a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/ColourDetector.cs">ColorDetector.cs</a>.</p>
+<p>With respect to the code below which is executed for every frame, first the region of interest is specified at line 9. While a tuned region of interest has the advantage of excluding inadvertent red objects that we don't want to trigger off, the main benefit is reduced processing time.</p>
+<p>
+<p>
+
+{% highlight c# %}
+ using(var matThresholded = new Mat())
+            {
+                var inputMat = input.Captured;
+                var settings = input.Settings;
+                if (!settings.Roi.IsEmpty)
+                {
+                    inputMat = new Mat(inputMat, settings.Roi);
+                }
+                CvInvoke.CvtColor(inputMat, hsvFrame, ColorConversion.Bgr2Hsv);
+                using (var lowerScalar = new ScalarArray(settings.LowThreshold))
+                using (var upperScalar = new ScalarArray(settings.HighThreshold))
+                {
+                    CvInvoke.InRange(hsvFrame, lowerScalar, upperScalar, matThresholded); //Threshold the image
+                }
+                output.ThresholdImage = matThresholded.ToImage<Gray, byte>();
+                const int erodeDilateIterations = 1;
+                //morphological opening (remove small objects from the foreground)
+                output.ThresholdImage.Erode(erodeDilateIterations);
+                output.ThresholdImage.Dilate(erodeDilateIterations);
+                //morphological closing (fill small holes in the foreground)
+                output.ThresholdImage.Dilate(erodeDilateIterations);
+                output.ThresholdImage.Erode(erodeDilateIterations);
+                
+                var moments = output.ThresholdImage.GetMoments(true);
+                moments.GetCentralMoment(0, 0);
+                output.MomentArea = moments.M00;
+                if (settings.MomentArea.IsInRange(output.MomentArea))
+                {
+                    var posX = Convert.ToSingle(moments.M10/output.MomentArea);
+                    var posY = Convert.ToSingle(moments.M01/output.MomentArea);
+                    output.IsDetected = true;
+                    if (!settings.Roi.IsEmpty)
+                    {
+                        // transpose the detected coordinates to non ROI space
+                        posX += settings.Roi.X;
+                        posY += settings.Roi.Y;
+                    }
+                    output.CentralPoint = new PointF(posX, posY);
+                }
+            }
+            return output;
+{% endhighlight %}
+</p>
+<p>After setting Region of Interest, we convert our captured frame from RGB to HSV colour space on line 12. Lines 14-18 are taking those min/max ranges determined previously in the WinForms project and calling the InRange function. This creates a new grayscale image that has 0 (black) anywhere that isn't red and 1 (white) anywhere that is - assuming red is what we passed in as the HSV filter range. Lines 24-29 are smoothing out noise. The rest of the code is obtaining information on whether anything was detected in the specified HSV range, testing how big it is and then setting the output values for the caller.</p>
+<p>Once red has been detected, the rest is easy as Pi, flicking the servo to the appropriate position and then back again once the red disappears again.</p>
+<h2>Raspberry Pi Performance</h2>
+<p>Throughout the build the one thing I wasn't sure I could count on was the performance of the Raspberry Pi. With my first foray into OpenCV playing with C++ examples on Windows, I knew the project was feasible from a PC. The Raspberry Pi is somewhat slower however and it wasn't until late in the project that it became apparent the tiny SoC would be able to pull it off by processing enough frames per second to give it enough time to switch the sweeper gate. Here are some of the tricks I used to squeeze out some extra frames:</p>
+<h4>Raspberry Pi Camera</h4>
+<p>The Raspberry Pi camera module uses the GPU to process images. USB camera's on the Raspberry Pi use the CPI and are much much slower.</p>
+<h4>Resolution</h4>
+<p>The <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">RaspiCam library</a> capture settings are hard coded. The git source has it capturing at 640x480. I changed this to capture at 320x240 which significantly reduces pixels being buffered from the GPU, captured by OpenCV and then processed by the C# code. The library also had a very high bitrate specified that was more suited for HD capture so I throttled that down. I didn't run any A/B tests to see if the bitrate change had any effect so that is worthy of further investigation.</p>
+<h4>Overclock</h4>
+<p>The Raspberry Pi can be overclocked via the official raspiconfig tool. I tried the turbo setting straight off but my Pi refused to boot. I backed it down to Medium and earned a few more frames per second over the default clock. The Pi will throttle any overclock when it hits 80 degrees so just in case I grabbed some heatsinks off eBay and it has been keeping around the 41-42 degree mark.</p>
+<h4>Region Of Interest (ROI)</h4>
+<p>Specifying the Region of Interest also gives significant performance boosts, reducing the number of pixels that need to be processed for colour. Converting an image from RGB to HSV is relatively expensive and by setting the ROI only the required pixels are converted.</p>
+<h4>Console</h4>
+<p>The video shows the WinForms project that helps capture the HSV range but that project doesn't run the sorter. Running X Windows wastes valuable CPU! The actual servo sorting app runs from the console.</p>
+<h2>Conclusion</h2>
+<p>Well that about sums up my adventures with HSV colour filtering in OpenCV. OpenCV has a lot more interesting features and I have some ideas I want to implement. These ideas will require the breakdown of this current Lego model which has consumed a mammoth amount of spare time in the last 6 weeks but that is the nature of Lego!</p>
