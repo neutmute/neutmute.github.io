@@ -1,0 +1,87 @@
+---
+layout: post
+title: 'Pan Tilt #2: Raspberry Pi Camera / Servo Calibration'
+date: 2015-05-21 21:16:43.000000000 +10:00
+categories:
+- blog
+- lego
+- pan tilt
+- raspberry pi
+tags:
+- c#
+- camera
+- Lego
+- opencv
+- pantilt
+- pi
+- raspberry pi
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+excerpt: Calibrating the pan tilt platform
+---
+<div>
+<p>After building and testing my Lego pan tilt mechanism and controlling it with a joystick (<a href="/2015/05/05/pan-tilt-1-lego-build/">post 1</a> in this series), it was time to mount the Raspberry Pi Camera module on to it.</p>
+</div>
+<div>
+<p><img src="/assets/img/blog/pantilt5.jpg" alt="Raspberry Pi camera mounted on pan tilt" width="460" /></p>
+</div>
+<div></div>
+<div>With the 25cm flat ribbon cable from eBay, mounting the camera was easy. The next obvious step was to use OpenCV to identify an object of interest in the camera frame before writing code to slew the servos such that the object came into the center of the frame. Repeat this fast enough and the camera will jump around tracking a selected target. Handily, from my <a href="http://blog.turbine51.net/2014/10/05/raspberry-pi-lego-ball-machine/">marble sorting contraption</a>, I had most of the code required to make my pan tilt camera a colour tracking machine. Given a red marble say, I could use OpenCV to track the region of colour, calculate its center and then command the servos to point the camera directly at the target.</div>
+<div></div>
+<div><strong>Servo Calibration</strong></div>
+<div>Identifying the location of an object in the frame is all well and good however with that positional information in pixels, I needed to translate it into a servo movement that would move the camera so as to bring the object into the center of the view. Briefly I mistakenly thought I would need some form of <a href="http://en.wikipedia.org/wiki/PID_controller" target="_blank">PID control</a> before I realised that the PID control is already baked into the servo's PWM circuitry. I just need to feed the servo desired a position and it will do its very best to slew directly to and maintain that position.</div>
+<div></div>
+<div><strong>Hand tuned Calibration</strong></div>
+<div>First I tried my hand at obtaining the calibration data by hand. I expected the mapping of pixel deviation to servo movement to be linear, so one should be able to measure a few sample data points and use <a href="http://en.wikipedia.org/wiki/Linear_regression" target="_blank">Linear Regression</a>. The result of the regression would be a formula to calculate the required servo movement for any pixel deviation.</div>
+<div>I added some controls to my PiCamCV WinForms project to facilitate making the measurements - painting two reticles. One in the center and another at any arbitrary point.</div>
+<div></div>
+<div>
+<p><img src="/assets/img/blog/picamcvPanTilt.png" alt="Pan Tilt controls" width="605" height="271" /></p>
+</div>
+<div></div>
+<div>The process was a bit tedious but I managed to get 10 samples for each axis and the resulting graphs were nicely linear - as expected.</div>
+<div></div>
+<div>
+<p><img class="size-full wp-image-384" src="/assets/img/blog/handCalPan.png" alt="Hand measured pan axis regression" width="693" height="459" /></p>
+</div>
+<div></div>
+<div>
+<p><img src="/assets/img/blog/handCalTilt.png" alt="Hand measured tilt axis regression" width="743" height="284" /></p>
+</div>
+<div></div>
+<div>In the above graphs, the x-axis represents pixel deviation from the center. The y-axis is the servo movement required to bring the object into the center of the frame.</div>
+<div>Hence observing the first the pan regression graph, the required servo movement (y) for an object that is x pixels from the center is given by:</div>
+<div></div>
+<div>y = 0.0933x + 0.0864</div>
+<div></div>
+<div>The regression analysis gives R of 0.9991 meaning the formula is a very good fit to the data. R=1 means an exact match. Note however that the hand calibration was done at a capture resolution of 320x240 so capturing frames at any other resolution requires scaling. Reducing capture resolution is desirable to increase the processing speed - less pixels, less compute time.</div>
+<div></div>
+<div>After taking these results and coding them up, it was exciting to see the camera tracking a red ball. It was far from perfect though - it acted fairly erratically rather than the hoped for behaviour of zeroing in on a target with laser like precision. I'll discuss why later in this post but initially I thought my hand measurements were out. I decided I should be able to automate the calibration and get a much larger and accurate set of sample data across the main resolutions I wanted to capture at.</div>
+<div></div>
+<div><strong>Auto Calibration</strong></div>
+<div>After some consideration I realised I could improve the accuracy of my linear regression by automating the data samples. I coded up a controller that would make small servo deviations before measuring how far the center of a red marble moved and therefore build up an accurate servo to pixel map. When tracking, reversing this map gives a ready made lookup table for every pixel deviation. Since the camera is mounted on the pan/tilt the distance to target doesn't come into play - it would however if the camera was fixed independently of the pan tilt platform.</div>
+<div></div>
+<div>Here is the calibration in action:</div>
+<div></div>
+<div><iframe width="560" height="315" src="https://www.youtube.com/embed/p05iRiDGC0c" frameborder="0" allowfullscreen></iframe></div>
+<div></div>
+<div>Note the regression formula differs to my hand measured one due to the scaling between the respective capture resolutions of 320x240 for hand calibration vs 160x120 auto calibrated.</div>
+<div></div>
+<div>
+<p><img class="size-full wp-image-395" src="/assets/img/blog/autoPan.png" alt="Automated Pan samples at 160x120" width="1038" height="400" /></p>
+</div>
+<div>
+<p><img class="size-full wp-image-396" src="/assets/img/blog/autoTilt.png" alt="Automated Tilt samples at 160x120" width="952" height="710" /></p>
+</div>
+<div></div>
+<div><strong>Eratic Behaviour Solved</strong></div>
+<div>In the process of building and debugging my auto calibrating engine, I realised there were two factors at play in the erratic behaviour seen earlier and it wasn't necessarily my grossly inaccurate hand measured regression.</div>
+<div></div>
+<div>One, the images being pulled out of the buffer were stale. After slewing the servo and then pulling out a frame I could see the image being used for the measurement was completely wrong - it was from where the servo had been a second before, not where it was now. After some sleuthing I realised I had to discard 2 frames before making a measurement on pixel deviation.</div>
+<div></div>
+<div>Secondly the auto calibration wasn't always waiting long enough for the servo to complete its movement and was capturing images with motion blur before the camera had reached its final resting position. These two factors were hampering the tracking solution and once identified and solved, improved the accuracy greatly.</div>
+<div></div>
+<div>Next post: colour tracking!</div>
