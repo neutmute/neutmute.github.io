@@ -1,0 +1,66 @@
+---
+layout: post
+title: 'Pan Tilt #4: Face tracking'
+date: 2015-05-31 14:54:49.000000000 +10:00
+categories:
+- blog
+- lego
+- pan tilt
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+author:
+excerpt: Face tracking with the Raspberry Pi Pan Tilt 
+---
+<p>This is post #4 in a series about making a pan tilt controller for the Raspberry Pi and it's camera module. 
+<a href="/2015/05/19/pan-tilt-1-lego-build/">Post 1</a> discussed the Lego build. 
+<a href="/2015/05/21/pan-tilt-2-raspberry-pi-camera-servo-calibration/">Post 2</a> mounted the camera, 
+<a href="/2015/05/24/pan-tilt-3-colour-tracking/">Post 3</a> used colour tracking to control the servos.</p>
+<p>Tracking coloured balls is all well and good but what would be really neat would be tracking a face with the camera. OpenCV comes out of the box with face detection so I got to work.</p>
+<p>The joystick and colour tracking controllers from the previous posts laid the ground work to make a pluggable architecture for my controllers. It didn't take long to add face detection capabilities. 
+
+The source <a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/FaceDetector.cs">is on github</a>.</p>
+<p>After getting it working there are some problems with face tracking however. So much so I haven' t bothered to record a video of it.</p>
+<p><strong>Problem: Raspberry Pi Performance</strong></p>
+<p>Running on my Intel Core i7, face detection takes a few milliseconds. Running on the Pi however it can take 250ms @ 128x96 with the default settings on the cascade classifier. The face detection - or any object detection for that matter - must be completed as fast as possible to allow the camera to continually move and track the target. Processing times of 250ms per frame is too slow.  The timing can be improved by tuning the inputs to the classifier - the details of which would belong to their own blog post. Another possibility for performance improvement is compiling OpenCV for multi threaded operation - by default Intel's TBB is not available on Raspbian's image at the time of writing.</p>
+<p>Below are the rough the face detection response times</p>
+<table class="table table-striped">
+<thead>
+<tr>
+<th rowspan="2">Resolution</th>
+<th colspan="2">B+ Framerate / 10 frames (ms)</th>
+</tr>
+<tr>
+<th>Scale 1.1</th>
+<th>Scale 1.4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64x48</td>
+<td>1480 (min size=5)</td>
+<td> undetected</td>
+</tr>
+<tr>
+<td>128x96</td>
+<td>3250 (min size=20)</td>
+<td> 2100</td>
+</tr>
+<tr>
+<td>160x120</td>
+<td> 4880</td>
+<td> 2900</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Problem: Full Frontal Views Required<br />
+</strong></p>
+<p>Face tracking works well as long as the subject keeps their face pointed toward the camera. If they approach side on or turn their head to leave, the face detection drops out as it isn't trained for profile views. This makes the face tracking not quite as magical as originally envisaged.</p>
+<p><strong>Problem: Field of View</strong></p>
+<p>The stock lens for the Pi has a relatively narrow field of view. It doesn't take much deviation for the subject to move out of view of the camera and for it to come to a standstill. This is compounded by the face processing time required.</p>
+<p><strong>Conclusion</strong></p>
+<p>More work required!</p>

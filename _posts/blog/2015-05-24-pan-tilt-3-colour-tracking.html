@@ -1,0 +1,57 @@
+---
+layout: post
+title: 'Pan Tilt #3: Colour Tracking'
+date: 2015-05-24 14:53:38.000000000 +10:00
+categories:
+- blog
+- lego
+- pan tilt
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+author:
+excerpt: Colour tracking with the Raspberry Pi pan tilt platform
+---
+<div>I finished <a href="/2015/05/21/pan-tilt-2-raspberry-pi-camera-servo-calibration/">Post 2</a> having calibrated the pan tilt mechanism. For a given location of a detected target, we can look up the exact movement required to slew the servo's so that the camera is centered on that object.</div>
+<div></div>
+<div>With that as a base, I coded up a <a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/PanTilt/Controllers/ColourTrackingPanTiltController.cs">colour tracking controller</a> for the pan tilt platform. Here it is in action:</div>
+<div></div>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/-dYrehf3buI" frameborder="0" allowfullscreen></iframe></p>
+<p>The inset in the video shows what the Pi camera is seeing. The pixelated look is because it is capturing at 64x48 pixels. The lower the resolution, the less data to process, the more frames can be processed per second, thus making the tracking more responsive. As you can see colour tracking doesn't require particularly high resolution.</p>
+<p>Below is a table of colour tracking frame rates observed at each resolution. The values don't come up to exactly what is shown in the video since these measurements were taken on pure colour tracking code without the pan tilt controller.</p>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Resolution (pixels)</th>
+<th>B+ Framerate / 10 frames</th>
+<th>Pi 2 Framerate / 10 frames</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64x48</td>
+<td>480ms</td>
+<td></td>
+</tr>
+<tr>
+<td>128x96</td>
+<td>750ms</td>
+<td></td>
+</tr>
+<tr>
+<td>160x120</td>
+<td>960ms-1400ms</td>
+<td></td>
+</tr>
+<tr>
+<td>320x240</td>
+<td>2300ms</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The video is made with the B+. I'll come back and fill in the Pi 2 framerate when I shift over to that device.</p>

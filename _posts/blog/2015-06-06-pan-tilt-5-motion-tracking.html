@@ -1,0 +1,50 @@
+---
+layout: post
+title: 'Pan Tilt #5: Motion Tracking'
+date: 2015-06-06 10:57:27.000000000 +10:00
+categories:
+- blog
+- lego
+- pan tilt
+- raspberry pi
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+excerpt: 'Adding motion tracking to the pan tilt platform'
+---
+<p>The first four posts in this series have dealt with building my Raspberry Pi pan tilt platform, adding joystick control, colour tracking and face tracking.</p>
+<p>Face tracking sounds neat but it has performance problems when run on the Pi CPU. My idea is to augment face recognition with something faster - perhaps motion detection.</p>
+<p>Below are the metrics for motion detection</p>
+<table class="table table-striped">
+<thead>
+<tr>
+<th rowspan="2">Resolution</th>
+<th>B+ Framerate / 10 frames (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64x48</td>
+<td> 950 (min area=64)</td>
+</tr>
+<tr>
+<td>128x96</td>
+<td> 2000 (min area=400)</td>
+</tr>
+<tr>
+<td>160x120</td>
+<td> 2400 (min area=2000)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Motion detection comes with its own problems however as every movement of the pan tilt platform requires the motion history to be reset. 
+The motion history then needs time to rebuild to reliably detect motion again.
+Night time tracking is a problem due to CCD noise in low light triggering motion detection.
+This is a work in progress...
+</p>
+
