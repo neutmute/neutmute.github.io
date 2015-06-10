@@ -1,0 +1,60 @@
+---
+layout: post
+title: 'Pan Tilt #1: Lego Build'
+date: 2015-05-19 21:04:46.000000000 +10:00
+categories:
+- blog
+- lego
+- pan tilt
+- raspberry pi
+tags:
+- camera
+- Lego
+- pantilt
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+  _oembed_f65290b48918dee597fc8c851405d82e: "{{unknown}}"
+  _oembed_52c96b00d19c4e305e580bf3bcbd54b9: "{{unknown}}"
+  _oembed_e7b69ebdeb55e0746c087bf2a89ed7fe: "{{unknown}}"
+  _oembed_a40d32f372ad769a4bfe0e8a2bd09418: <iframe width="660" height="371" src="https://www.youtube.com/embed/ja5geAAlOC0?feature=oembed"
+    frameborder="0" allowfullscreen></iframe>
+  _oembed_time_a40d32f372ad769a4bfe0e8a2bd09418: '1430827008'
+author:
+excerpt: Building a Raspberry Pi Pan Tilt platform with Lego
+---
+<div>In January, I decided my next Raspberry Pi Lego project would be a pan-tilt mechanism for mounting the raspberry pi camera. A pan tilt device allows one to point the camera using two motors - the combination of left / right panning with up / down tilting gives a high degree of freedom to point the camera to where you like. Given their rapid response times a servo motor seemed the most appropriate so I ordered a couple more from eBay in preparation.</div>
+<div>
+<p><img src="/assets/img/blog/commercialpantilt.jpg" alt="Commerical Pan Tilt Camera" width="264" height="264" /> </p>
+</div>
+<div></div>
+<div>The Raspberry Pi camera module comes with a fairly short 10cm ribbon cable to connect to the Pi. This short cable limits how much play could be supported in a pivoting camera base and so my first thoughts were to make a pan tilt mechanism that would carry the entire Pi. After some initial prototyping this didn't seem very practical. The center of gravity would need to be balanced well and the servo's would have a larger mass to manipulate which would slow them down. The Lego required to mount would also be large and ungainly.</div>
+<div></div>
+<div>While obvious in hindsight, the trick I realised would be to source a longer ribbon cable for the camera, giving plenty of slack for the camera to slew around. Forum posts indicate some surprisingly long usable cable lengths are possible with varying degrees of signal degradation, so I ordered a length of 25cm FPC ribbon cable from eBay. The trick here is to order a cable that has its exposed pins on opposite sides at either end. Cables whose exposed pins are on the same side would reverse the pinout to the camera and fail to work.</div>
+<div></div>
+<div>I searched around for some ideas on how to best implement the pan/tilt mount and the image below represents the mechanism at its most simple. One panning servo for the base - on top of which is mounted the tilt servo and camera.</div>
+<div></div>
+<div>
+<p><img src="/assets/img/blog/servopantilt.jpg" alt="Servo pan tilt mechanism" width="253" height="274" /></p>
+</div>
+<div></div>
+<div>The HXT900 servo's I have are the same form factor as above so I went about working out how to replicate this mount in Lego.</div>
+<div>Using the dremelled out 6 stud plates from the <a href="/2014/10/05/raspberry-pi-lego-ball-machine/" target="_blank">marble sorting project</a>, here are the results:</div>
+<div></div>
+<div>
+<p><img src="/assets/img/blog/pantilt1.jpg" alt="Panning base" width="660" height="672" /><br/>Panning base - applied a bit too much pressure with the locking pliers while dremmelling and the left most stud is slightly damaged.</p>
+<p><img src="/assets/img/blog/pantilt2.jpg" alt="Tilt servo packed with cardboard" width="660" height="495" /><br/> Tilt servo packed with cardboard. There is additional packing cardboard behind the face to reduce backlash.</p>
+<p><img src="/assets/img/blog/pantilt3.jpg" alt="Lego Pan Tilt mechanism" /></p>
+</div>
+<div></div>
+<div>Since I was too impatient to wait for a camera controlled interface, I wrote up a joystick controller to test out the mechanism. <a href="http://www.opentk.com/">OpenTK </a>has a nice cross platform joystick implementation so as per my usual development process, I coded it all up did most testing on my Windows desktop before transferring the binaries to the Pi for execution.</div>
+<div>Here is the mechanism at work.</div>
+<div></div>
+<div><iframe width="560" height="315" src="https://www.youtube.com/embed/CgY3GLTL5PA" frameborder="0" allowfullscreen></iframe></div>
+<div></div>
+<div>The joystick controller (<a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/PanTilt/Controllers/JoystickPanTiltController.cs">source</a>) is timer based. When the timer fires a set of new samples are read from the joystick axes. The calculation on how much to move the servo is contained in a separate class - <a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/PanTilt/MoveStrategies/JoystickModifierStrategy.cs">JoystickModifierStrategy</a>. It reads the throttle axis to decide how big a jump to make on each tick. If throttle is high, the camera will slew further with each tick. If the throttle is low, then the camera moves with a finer precision. Once the required slew is calculated it is sent to the servos via PWM.</div>
+<div></div>
+<div></div>
+<div>The pan tilt isn't as silky smooth as the <a href="https://www.youtube.com/watch?v=ja5geAAlOC0" target="_blank">Pixy camera</a> - mine definitely has a notchy feel to it. I'm not entirely sure why that is - it could be their servos behave differently or perhaps the Pixie 50fps update rate smooths the responses out.</div>
