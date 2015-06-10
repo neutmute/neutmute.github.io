@@ -2,11 +2,11 @@
 highlighter: pygments
 
 # Site settings
-title: turbine51.net
+title: neutmute.github.io
 description: "Random snippets of knowledge"
 analytics: #Google analytics code in the format XX-nnnnnnnn-n
 baseurl: "" #important: start with /
-url: "http://blog.turbine51.net"
+url: "http://neutmute.github.io"
 
 # Build settings
 markdown: kramdown
