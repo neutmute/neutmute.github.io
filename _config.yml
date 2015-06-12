@@ -2,7 +2,7 @@
 highlighter: pygments
 
 # Site settings
-title: neutmute.github.io
+title: Random snippets of knowledge
 description: "Random snippets of knowledge"
 analytics: #Google analytics code in the format XX-nnnnnnnn-n
 baseurl: "" #important: start with /
