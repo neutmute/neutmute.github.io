@@ -24,36 +24,65 @@ excerpt: Face tracking with the Raspberry Pi Pan Tilt
 <p>The joystick and colour tracking controllers from the previous posts laid the ground work to make a pluggable architecture for my controllers. It didn't take long to add face detection capabilities. 
 
 The source <a href="https://github.com/neutmute/PiCamCV/blob/master/source/PiCamCV.Common/FaceDetector.cs">is on github</a>.</p>
-<p>After getting it working there are some problems with face tracking however. So much so I haven' t bothered to record a video of it.</p>
-<p><strong>Problem: Raspberry Pi Performance</strong></p>
-<p>Running on my Intel Core i7, face detection takes a few milliseconds. Running on the Pi however it can take 250ms @ 128x96 with the default settings on the cascade classifier. The face detection - or any object detection for that matter - must be completed as fast as possible to allow the camera to continually move and track the target. Processing times of 250ms per frame is too slow.  The timing can be improved by tuning the inputs to the classifier - the details of which would belong to their own blog post. Another possibility for performance improvement is compiling OpenCV for multi threaded operation - by default Intel's TBB is not available on Raspbian's image at the time of writing.</p>
-<p>Below are the rough the face detection response times</p>
-<table class="table table-striped">
+<p>After getting it working there are some problems with face tracking however. So much so I haven't bothered to record a video of it.</p>
+
+
+<p><strong>Problem: Raspberry Pi B+ Performance</strong></p>
+<p>Running on my Intel Core i7, face detection takes a few milliseconds. 
+Running on the B+ Pi however it can take 250ms @ 128x96 <strong>per frame</strong> with the default settings on the cascade classifier. 
+The face detection - or any object detection for that matter - must be completed as fast as possible to allow the camera to continually move and track the target. 
+Processing times of 250ms per frame is too slow.  
+The timing can be improved by tuning the inputs to the classifier - in this case I increased the scaling from 1.1 to 1.4 at the expense of more false negatives but even at 1.4 there isn't enough performance improvement to save it.
+</p>
+<p>
+A further possibility for performance improvement is compiling OpenCV with TBB for multi threaded operation on the Pi 2 - 
+by default Intel's TBB is not available on Raspbian's image at the time of writing.</p>
+
+<p>Below are the rough the face detection response times for the B+</p>
+
+<div class="alert alert-info" role="alert">UPDATE 18 June - Now with Pi 2 timings, what a difference!</div>
+
+<table class="table table-striped table-bordered">
 <thead>
 <tr>
-<th rowspan="2">Resolution</th>
-<th colspan="2">B+ Framerate / 10 frames (ms)</th>
+<th rowspan="3"> Resolution</th>
+<th colspan="3">Framerate / 10 frames (ms)</th>
+</tr>
+<tr>
+
+<th colspan="2">Raspberry Pi B+</th>
+<th>Raspberry Pi 2 </th>
 </tr>
 <tr>
 <th>Scale 1.1</th>
 <th>Scale 1.4</th>
+<th>Scale 1.1, TBB=false</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>64x48</td>
 <td>1480 (min size=5)</td>
-<td> undetected</td>
+<td>undetected</td>
+<td>396</td>
 </tr>
 <tr>
 <td>128x96</td>
 <td>3250 (min size=20)</td>
 <td> 2100</td>
+<td>400</td>
 </tr>
 <tr>
 <td>160x120</td>
 <td> 4880</td>
 <td> 2900</td>
+<td>400-550</td>
+</tr>
+<tr>
+<td>320x240</td>
+<td> - </td>
+<td>  - </td>
+<td>1800</td>
 </tr>
 </tbody>
 </table>
