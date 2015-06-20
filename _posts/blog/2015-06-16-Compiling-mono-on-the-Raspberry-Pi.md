@@ -35,7 +35,8 @@ Except then there are two versions of mono:
 
 I haven't figured out how to swap them cleanly. This is how I hack it:
 
-    sudo mv /usr/bin/mono /usr/bin/mono-3.2.8 ### kill the old mono. probably a better way? ### reverse: sudo mv /usr/bin/mono-3.2.8 /usr/bin/mono
+    sudo mv /usr/bin/mono /usr/bin/mono-3.2.8 ### kill the old mono. probably a better way? 
+	### reverse above: sudo mv /usr/bin/mono-3.2.8 /usr/bin/mono
     export PATH=$PATH:/opt/mono-{{page.monoVersionExtract}}/bin ### add this to  ~/.profile
     sudo visudo ### edit secure path to include mono bin folder for sudo'd commands
      
