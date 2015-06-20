@@ -25,3 +25,20 @@ From commit <a href="https://github.com/neutmute/emgucv/commit/1fa5e56a66d2a7526
 
 <span style="color: #339966;">cp ~/emgucv/opencv/modules/hal/include/opencv2/hal/defs.h ~/emgucv/opencv/modules/core/include/opencv2/core/opencv2/hal</span></pre>
 <p>Note that EmguCV's CMAKE builds OpenCV with TBB=FALSE - disabling support for Intel's Thread Building Blocks. TBB isn't available on Raspian's ARM hard float Wheezy at the time of writing (via apt-get package management at least). I plan to get this going at some point though. Face detection in OpenCV uses the <a href="http://docs.opencv.org/modules/objdetect/doc/cascade_classification.html">detectMultiScale </a>method which should get a nice speed boost on the Raspberry Pi 2 when TBB is enabled.</p>
+
+
+<div class="alert alert-info" role="alert">UPDATE 20 June - Also compiles flawlessly in commit [56f898c].</div>
+<div class="alert alert-warning" role="alert">
+<h4>Trap for new players</h4>
+
+After switching branches and remotes around I started getting all sorts of errors like:
+<pre>
+error: expected constructor, destructor, or type conversion before 'cveGpuMatIsContinuous'
+</pre>
+and:
+<pre>
+error: 'cvSampleLine' was not declared in this scope
+</pre>
+until I realised my submodules were out of sync. It wasn't until I completely purged the repo that I realised, there must be a more elegant way to resync git submodules which I will try next time.</div>
+
+
