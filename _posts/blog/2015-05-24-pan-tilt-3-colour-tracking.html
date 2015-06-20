@@ -26,12 +26,17 @@ For a given location of a detected target, we can look up the exact movement req
 <p><iframe width="560" height="315" src="https://www.youtube.com/embed/-dYrehf3buI" frameborder="0" allowfullscreen></iframe></p>
 <p>The inset in the video shows what the Pi camera is seeing. The pixelated look is because it is capturing at 64x48 pixels. The lower the resolution, the less data to process, the more frames can be processed per second, thus making the tracking more responsive. As you can see colour tracking doesn't require particularly high resolution.</p>
 <p>Below is a table of colour tracking frame rates observed at each resolution. The values don't come up to exactly what is shown in the video since these measurements were taken on pure colour tracking code without the pan tilt controller.</p>
-<table class="table table-striped">
+<table class="table table-striped table-bordered">
 <thead>
 <tr>
+<th>&nbsp;</th>
+<th colspan="3">Framerate (ms) / 10 frames</th>
+</tr>
+<tr>
 <th>Resolution (pixels)</th>
-<th>B+ Framerate / 10 frames (ms)</th>
-<th>Pi 2 Framerate / 10 frames (ms)</th>
+<th>Model B+</th>
+<th>Pi 2 (tbb=false)</th>
+<th>Pi 2 (tbb=true)</th>
 </tr>
 </thead>
 <tbody>
@@ -39,22 +44,31 @@ For a given location of a detected target, we can look up the exact movement req
 <td>64x48</td>
 <td>480</td>
 <td>400</td>
+<td>190</td>
 </tr>
 <tr>
 <td>128x96</td>
 <td>750</td>
 <td>400</td>
+<td>230</td>
 </tr>
 <tr>
 <td>160x120</td>
 <td>960-1400</td>
 <td>400</td>
+<td>270</td>
 </tr>
 <tr>
 <td>320x240</td>
 <td>2300</td>
 <td>700</td>
+<td>630-680</td>
 </tr>
 </tbody>
 </table>
-<p>The video is made with the B+ but after setting up the Pi I inserted the framerates. Interestingly, the lower three resolutions have a floor of 400ms.
+<p>The video is made with the Model B+</p>
+
+<div class="alert alert-info" role="alert">UPDATE June - Now with Pi 2 timings.
+Note there is a floor of 400ms/10 frames with TBB=false. The floor is because I didn't realise
+that the classifier was eating up the default 25 fps. When I made the TBB=true measurements, I increased the capture framerate sufficiently to ensure the classifier wasn't starved of work.
+So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can see slight benefits of TBB.</div>
