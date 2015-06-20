@@ -13,7 +13,7 @@ tags:
 tbbVersion: tbb43_20150611oss
 excerpt: Notes on compiling Intel Thread Building Blocks (TBB) on Raspbian
 ---
-This is my cheat sheet for compiling compiling Intel Thread Building Blocks (TBB) on Raspbian and then compiling EmguCV with it:
+This is my cheat sheet for compiling Intel Thread Building Blocks (TBB) on Raspbian and then compiling EmguCV with it:
 
 
 	# Download and unpack

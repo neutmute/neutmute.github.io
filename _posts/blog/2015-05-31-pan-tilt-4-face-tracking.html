@@ -34,29 +34,30 @@ The face detection - or any object detection for that matter - must be completed
 Processing times of 250ms per frame is too slow.  
 The timing can be improved by tuning the inputs to the classifier - in this case I increased the scaling from 1.1 to 1.4 at the expense of more false negatives but even at 1.4 there isn't enough performance improvement to save it.
 </p>
-<p>
-A further possibility for performance improvement is compiling OpenCV with TBB for multi threaded operation on the Pi 2 - 
-by default Intel's TBB is not available on Raspbian's image at the time of writing.</p>
 
-<p>Below are the rough the face detection response times for the B+</p>
+<p>Below are the rough the face detection response times I measured.</p>
 
-<div class="alert alert-info" role="alert">UPDATE 18 June - Now with Pi 2 timings, what a difference!</div>
+<div class="alert alert-info" role="alert">UPDATE June - Now with Pi 2 timings, what a difference! 
+Note there is a floor of 400ms/10 frames with TBB=false. The floor is because I didn't realise
+that the classifier was eating up the default 25 fps. When I made the TBB=true measurements, I increased the capture framerate sufficiently to ensure the classifier wasn't starved of work.
+So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can see the benefits of TBB kicking in.</div>
 
 <table class="table table-striped table-bordered">
 <thead>
 <tr>
 <th rowspan="3"> Resolution</th>
-<th colspan="3">Framerate / 10 frames (ms)</th>
+<th colspan="4">Framerate / 10 frames (ms)</th>
 </tr>
 <tr>
 
 <th colspan="2">Raspberry Pi B+</th>
-<th>Raspberry Pi 2 </th>
+<th colspan="2">Raspberry Pi 2 </th>
 </tr>
 <tr>
 <th>Scale 1.1</th>
 <th>Scale 1.4</th>
 <th>Scale 1.1, TBB=false</th>
+<th>Scale 1.1, TBB=true</th>
 </tr>
 </thead>
 <tbody>
@@ -65,24 +66,28 @@ by default Intel's TBB is not available on Raspbian's image at the time of writi
 <td>1480 (min size=5)</td>
 <td>undetected</td>
 <td>396</td>
+<td>170-200</td>
 </tr>
 <tr>
 <td>128x96</td>
 <td>3250 (min size=20)</td>
-<td> 2100</td>
+<td>2100</td>
 <td>400</td>
+<td>330</td>
 </tr>
 <tr>
 <td>160x120</td>
 <td> 4880</td>
 <td> 2900</td>
 <td>400-550</td>
+<td>400-440</td>
 </tr>
 <tr>
 <td>320x240</td>
 <td> - </td>
-<td>  - </td>
+<td> - </td>
 <td>1800</td>
+<td>1300</td>
 </tr>
 </tbody>
 </table>

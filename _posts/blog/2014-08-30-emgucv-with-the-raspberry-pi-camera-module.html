@@ -38,7 +38,7 @@ excerpt: Accessing the Raspberry Pi Camera from C#
 </ol>
 <h2>RaspiCamCV</h2>
 <p>As noted at the end of the last post, OpenCV and hence EmguCV cannot locate the Raspberry Pi camera by default. <a href="https://robidouille.wordpress.com/2013/10/19/raspberry-pi-camera-with-opencv/">Emil Valkov</a> has done some work to make a C library to expose the pi camera in a manner compatible with OpenCV. We will make use of that library to make the pi camera available to EmguCV.</p>
-<p>Emil's repo initially only produced a static library which EmguCV can't use. Clone <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">my fork</a> however, follow the instructions in the readme and the make file will automatically produce the shared library <strong>libraspicamcv.so</strong> for you.</p>
+<p>Emil's repo initially only produced a static library which EmguCV couldn't use. I pleased to say he accepted my pull requests so that a <strong>libraspicamcv.so</strong> library is now built. Follow <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">the instructions</a>  to build a copy of this library.</p>
 <h2>PInvoke</h2>
 <p>Next, we need to create a c# assembly which PInvoke's the RaspiCamCV library. For this, see <a href="https://github.com/neutmute/PiCamCV/blob/master/source/LibPiCamCV/PInvoke/CvInvokeRaspiCamCV.cs">CvInvokeRaspiCamCV.cs</a>, a snippet of which looks like this:</p>
 <p><code>[DllImport(OpencvRaspiCamCVLibrary, EntryPoint=EntryPointCapture, CallingConvention = CvCallingConvention)]<br />
