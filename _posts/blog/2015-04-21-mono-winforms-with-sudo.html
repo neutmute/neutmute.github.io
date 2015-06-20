@@ -27,4 +27,6 @@ excerpt: Getting WinForms to run under sudo
 <pre><span style="color:#ff0000;">sudo mono picamcv.win.exe</span></pre>
 <p>I needed</p>
 <pre><span style="color:#339966;">gksudo mono picamcv.win.exe</span></pre>
+<p>Or if you are using <a href="http://www.mono-project.com/docs/compiling-mono/parallel-mono-environments/">parallel mono environments</a>:</p>
+<pre><span style="color:#339966;">gksudo -- bash -c 'source mono4.sh; mono picamcv.win.exe'</span></pre>
 <p>Onward!</p>
