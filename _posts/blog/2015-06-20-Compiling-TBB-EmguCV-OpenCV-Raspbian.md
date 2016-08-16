@@ -13,7 +13,7 @@ tags:
 tbbVersion: tbb43_20150611oss
 excerpt: Notes on compiling Intel Thread Building Blocks (TBB) on Raspbian
 ---
-This is my cheat sheet for compiling Intel Thread Building Blocks (TBB) on Raspbian and then compiling EmguCV with it:
+This is my cheat sheet for compiling Intel Thread Building Blocks (TBB) on Raspbian for the Pi v2 (ARMv7) and then compiling EmguCV with it:
 
 
 	# Download and unpack
@@ -39,3 +39,5 @@ Now change to the **emgucv** root folder and copy the cmake line from `$\platfor
 and finally lets build EmguCV/OpenCV executing `make`
 
 Now we have a set of OpenCV binaries targeting TBB and the four cores of the Raspberry Pi 2!
+
+Also see the [August 2016 update](/2016/08/16/Compiling-TBB-EmguCV-OpenCV-Raspberry-Pi/) for Raspberry Pi 3
