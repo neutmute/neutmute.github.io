@@ -64,7 +64,13 @@ Once that is done, the MusicCast application will initiate a series of HTTP quer
   
 ### Secure Responses
 Several calls in the above list are on a `secure` route. It is unknown whether the responses are ROT-13 or AES.
-For the moment,
+`Swimbait` handles these calls by man in the middling the requests - forwarding the same request to a real MusicCast speaker and then responding with the reply from the real speaker.
 
+### NetUSB, Server Play Commands
+The remote control browsers available content for `NetRadio` and `Server` music sources via `getListInfo` and `SetListControl` methods. The former enumerates the list of options - for example - lists of radio stations and the `SetListControl` selects an option - including the commencement of playback.
+
+This means the MusicCast speaker is the entire server for these commands. The remote control cannot send it's own URL for playback (ie: `file:///mysan/rick/never-gonna-give-you-up.mp3`)
+
+Examples of interaction between the remote and speaker can be found [here](https://github.com/neutmute/swimbait/tree/master/doc/caps).  
 
 ---
