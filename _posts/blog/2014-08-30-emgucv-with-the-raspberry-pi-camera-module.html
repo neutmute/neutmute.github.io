@@ -27,6 +27,9 @@ meta:
   _edit_last: '1'
 excerpt: Accessing the Raspberry Pi Camera from C#
 ---
+
+<p style="color:red">UPDATED: Nov 2016</p>
+
 <p>In the <a href="/2014/08/28/emgucv-on-the-raspberry-pi-with-mono/">last post</a>, I documented how to compile EmguCV on Raspbian and get a USB camera running with the standard Emgu example code. The performance of the USB camera is unsatisfactory however and the better option is to get the <a href="http://www.raspberrypi.org/product/camera-module/">Raspberry Pi Camera Module</a> hooked into EmguCV to take advantage of the GPU.</p>
 <h2>Prerequisites</h2>
 <p>The following assumes:</p>
@@ -38,7 +41,7 @@ excerpt: Accessing the Raspberry Pi Camera from C#
 </ol>
 <h2>RaspiCamCV</h2>
 <p>As noted at the end of the last post, OpenCV and hence EmguCV cannot locate the Raspberry Pi camera by default. <a href="https://robidouille.wordpress.com/2013/10/19/raspberry-pi-camera-with-opencv/">Emil Valkov</a> has done some work to make a C library to expose the pi camera in a manner compatible with OpenCV. We will make use of that library to make the pi camera available to EmguCV.</p>
-<p>Emil's repo initially only produced a static library which EmguCV couldn't use. I pleased to say he accepted my pull requests so that a <strong>libraspicamcv.so</strong> library is now built. Follow <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">the instructions</a>  to build a copy of this library.</p>
+<p>Follow <a href="https://github.com/neutmute/robidouille/tree/master/raspicam_cv">the instructions</a>  to build a copy of this library.</p>
 <h2>PInvoke</h2>
 <p>Next, we need to create a c# assembly which PInvoke's the RaspiCamCV library. For this, see <a href="https://github.com/neutmute/PiCamCV/blob/master/source/LibPiCamCV/PInvoke/CvInvokeRaspiCamCV.cs">CvInvokeRaspiCamCV.cs</a>, a snippet of which looks like this:</p>
 <p><code>[DllImport(OpencvRaspiCamCVLibrary, EntryPoint=EntryPointCapture, CallingConvention = CvCallingConvention)]<br />
@@ -48,8 +51,11 @@ public static extern IntPtr cvCreateCameraCapture(int index);
 <h2>Compiling on Windows</h2>
 <p>Let's convert Emil's simple <a href="https://github.com/robidouille/robidouille/blob/master/raspicam_cv/RaspiCamTest.c">raspicamtest.c</a> into C#. For that, see <a href="https://github.com/neutmute/PiCamCV/blob/master/source/Console/SimpleCv.cs">SimpleCv.cs.</a></p>
 <p>We now have all the basic building blocks for a simple test. So clone the <a href="https://github.com/neutmute/PiCamCV">PiCamCV </a>repository to your Windows OS.</p>
-<p>EmguCV looks for the unmanaged OpenCV dll's in <strong>x86</strong> and <strong>x64</strong> folders below the binary folder of the executing assembly. Edit the PiCamCV's <a href="https://github.com/neutmute/PiCamCV/blob/master/build/post_build_get_unmanaged.cmd">post_build_get_unmanaged.cmd</a> to point to your local Windows clone of EmguCV. This will copy the OpenCV dll's compiled by the EmguCV solution into PiCamCV's binary folder.</p>
-<p>Open PiCamCV's solution and run it in <strong>Debug</strong> configuration on your Windows host. With any luck you will see your USB connected camera open up in an OpenCV window.</p>
+<p>
+There are two submodule solutions in the <strong>~\picamcv\lib</strong> folder. Execute <strong>build.bat</strong> in their respective folders to ensure their packages are restored properly.
+</p>
+<p>EmguCV looks for the unmanaged OpenCV dll's in <strong>x86</strong> and <strong>x64</strong> folders below the binary folder of the executing assembly. Edit PiCamCV's <a href="https://github.com/neutmute/PiCamCV/blob/master/build/post_build_get_unmanaged.cmd">post_build_get_unmanaged.cmd</a> to point to your local Windows clone of EmguCV. This will copy the OpenCV dll's compiled by the EmguCV solution into PiCamCV's binary folder.</p>
+<p>Open PiCamCV's solution and start the WinForms project in <strong>Debug</strong> configuration on your Windows host. With any luck you will be able to start a capture and view a video stream from the camera.</p>
 <p>Now compile PiCamCV for <strong>UnixDebug</strong> and SCP the binary files onto your Pi at <strong>~/picamcv</strong>. <span style="color:#ff0000;">Be careful not to copy the Windows compiled emgucv binaries, these don't run on Linux. You need to use the Linux compiled versions (keep reading).</span></p>
 <h2>Running on the Raspberry Pi</h2>
 <p>SSH into your Pi</p>
@@ -57,7 +63,7 @@ public static extern IntPtr cvCreateCameraCapture(int index);
 <code>cp ~/robidouille/raspicam_cv/libraspicamcv.so ~/picamcv/</code></p>
 <p>Copy the <strong>opencv.so</strong> and <strong>emgu.CV.*</strong> files from the emgucv bin folder to the picamcv folder: <code>cp ~/emgucv/bin/*.* ~/picamcv</code></p>
 <p>Start up X Windows if you aren't already in it.</p>
-<p>From an X Window terminal, execute <code>mono picamconsole.exe</code><br />
+<p>From an X Window terminal, execute <code>mono picam.win.exe</code><br />
 With any luck, your pi camera module will now be streaming into an OpenCV window!</p>
 <p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/L0edGgYIjlc" frameborder="0" allowfullscreen></iframe>
