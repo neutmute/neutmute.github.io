@@ -37,26 +37,30 @@ The timing can be improved by tuning the inputs to the classifier - in this case
 
 <p>Below are the rough the face detection response times I measured.</p>
 
-<div class="alert alert-info" role="alert">UPDATE June - Now with Pi 2 timings, what a difference! 
+<div class="alert alert-info" role="alert">UPDATE June 2015 - Now with Pi 2 timings, what a difference! 
 Note there is a floor of 400ms/10 frames with TBB=false. The floor is because I didn't realise
 that the classifier was eating up the default 25 fps. When I made the TBB=true measurements, I increased the capture framerate sufficiently to ensure the classifier wasn't starved of work.
 So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can see the benefits of TBB kicking in.</div>
+
+<div class="alert alert-info" role="alert">UPDATE Nov 2016 - Pi 3 timings added</div>
 
 <table class="table table-striped table-bordered">
 <thead>
 <tr>
 <th rowspan="3"> Resolution</th>
-<th colspan="4">Framerate / 10 frames (ms)</th>
+<th colspan="5">Framerate / 10 frames (ms)</th>
 </tr>
 <tr>
 
 <th colspan="2">Raspberry Pi B+</th>
 <th colspan="2">Raspberry Pi 2 </th>
+<th colspan="1">Raspberry Pi 3 </th>
 </tr>
 <tr>
 <th>Scale 1.1</th>
 <th>Scale 1.4</th>
 <th>Scale 1.1, TBB=false</th>
+<th>Scale 1.1, TBB=true</th>
 <th>Scale 1.1, TBB=true</th>
 </tr>
 </thead>
@@ -67,6 +71,7 @@ So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can
 <td>undetected</td>
 <td>396</td>
 <td>170-200</td>
+<td>-</td>
 </tr>
 <tr>
 <td>128x96</td>
@@ -74,6 +79,7 @@ So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can
 <td>2100</td>
 <td>400</td>
 <td>330</td>
+<td>200-220</td>
 </tr>
 <tr>
 <td>160x120</td>
@@ -81,6 +87,7 @@ So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can
 <td> 2900</td>
 <td>400-550</td>
 <td>400-440</td>
+<td>350-430</td>
 </tr>
 <tr>
 <td>320x240</td>
@@ -88,7 +95,10 @@ So read tbb=false measurements of 400 as '400 or even faster'. At 320x240 we can
 <td> - </td>
 <td>1800</td>
 <td>1300</td>
+<td>850-1100</td>
 </tr>
+
+
 </tbody>
 </table>
 <p><strong>Problem: Full Frontal Views Required<br />
