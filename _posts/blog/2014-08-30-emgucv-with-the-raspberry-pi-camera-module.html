@@ -54,7 +54,12 @@ public static extern IntPtr cvCreateCameraCapture(int index);
 <p>
 There are two submodule solutions in the <strong>~\picamcv\lib</strong> folder. Execute <strong>build.bat</strong> in their respective folders to ensure their packages are restored properly.
 </p>
-<p>EmguCV looks for the unmanaged OpenCV dll's in <strong>x86</strong> and <strong>x64</strong> folders below the binary folder of the executing assembly. Edit PiCamCV's <a href="https://github.com/neutmute/PiCamCV/blob/master/build/post_build_get_unmanaged.cmd">post_build_get_unmanaged.cmd</a> to point to your local Windows clone of EmguCV. This will copy the OpenCV dll's compiled by the EmguCV solution into PiCamCV's binary folder.</p>
+<p>EmguCV looks for the unmanaged OpenCV dll's in <strong>x86</strong> and <strong>x64</strong> folders below the binary folder of the executing assembly. PiCamCV expects an environment variable to tell it where to pull the EmguCV binaries from. Execute the following powershell with the correct path to your EmguCV bin folder</p>
+<p>
+<code>
+[Environment]::SetEnvironmentVariable("EmguCV_Bin_Folder", "C:\Code\emgucv\bin", "User") 
+</code>
+</p>
 <p>Open PiCamCV's solution and start the WinForms project in <strong>Debug</strong> configuration on your Windows host. With any luck you will be able to start a capture and view a video stream from the camera.</p>
 <p>Now compile PiCamCV for <strong>UnixDebug</strong> and SCP the binary files onto your Pi at <strong>~/picamcv</strong>. <span style="color:#ff0000;">Be careful not to copy the Windows compiled emgucv binaries, these don't run on Linux. You need to use the Linux compiled versions (keep reading).</span></p>
 <h2>Running on the Raspberry Pi</h2>
