@@ -27,4 +27,4 @@ I can't think of what the explanation might be** but at least I can spend time w
 
 ---
 
-**2016 Update** LG Australia site doesn't have the firmware anymore but [Singapore has 16552](http://www.lg.com/sg/support/support-product/lg-VR6270LVMB) for `VR6270LVMB` which loaded fine.
+**Update** A year later in December 2016 and the hom-bot is going around in circles again. The LG Australia site doesn't have the firmware anymore but [Singapore has 16552](http://www.lg.com/sg/support/support-product/lg-VR6270LVMB) for `VR6270LVMB` which loaded fine. Again the behaviour has been fixed by a firmware update. I'll save the firmware this time in case it becomes unavailable. Perhaps writing the non volatile firmware resets accumulated training data which has caused the robot to misbehave. That is my current best theory on why this technique fixes the errant behaviour. 
