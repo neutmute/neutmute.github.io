@@ -13,7 +13,9 @@ This is a cheatsheet so I remember the tricks I had setting up SonarQube scans i
 
 First you will need to get the MSBuild scanner installed - if you use chocolatey, this is as simple as
 
-`choco install msbuild-sonarqube-runner `
+`choco install msbuild-sonarqube-runner`
+
+Next install `Build Tools for Visual Studio 2017` so you have the latest `msbuild`. Go ahead and add the install location to the PATH environment variable so that when TeamCity executes MSBuild it will find it in the path (I didn't use the MSBuild TeamCity runner)
 
 This is well documented so broadly speaking, you do three things
 1. Execute a sonar start command: `SonarQube.Scanner.MSBuild.exe /start <plus other args`
