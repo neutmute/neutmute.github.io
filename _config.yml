@@ -25,5 +25,3 @@ colors:  #in hex code if not noted else
   
 # Short text about your company. Shown in footer on every page and also separately on Home and Contact page.
 about: "Random snippets of knowledge"
-
-theme: jekyll-theme-slate
