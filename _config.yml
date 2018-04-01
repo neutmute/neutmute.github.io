@@ -1,5 +1,5 @@
 ### GENERAL SETTINGS ###
-highlighter: pygments
+highlighter: rouge
 
 # Site settings
 title: Random snippets of knowledge
