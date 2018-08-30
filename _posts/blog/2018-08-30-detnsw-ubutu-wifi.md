@@ -10,12 +10,12 @@ tags:
 excerpt: Configuring Ubuntu Mate
 ---
 
-This is how to connect an Ubuntu MATE laptop to the wifi network of a NSW public school
+This is how to connect an Ubuntu MATE Linux laptop to the wifi network of a NSW public school as of August 2018
 
 ![Scripts folder](/assets/img/blog/20180830/wifi-settings.png)
 
 * SSID: detnsw
-* EAP method: PEAP
+* Authentication: PEAP
 * Anonymous identity: leave blank
 * Domain: leave blank
 * CA certificate: None
@@ -28,6 +28,6 @@ This is how to connect an Ubuntu MATE laptop to the wifi network of a NSW public
 
 ![Scripts folder](/assets/img/blog/20180830/proxy.png)
 * Setting the Proxy PAC on the **Proxy** tab of the network connection didn't help.
-* Setting the PAC to `http://pac.det.nsw.edu.au/fib/proxy.pac` in the **Network Proxy** settings
+* Setting the Autoconfiguration URL to `http://pac.det.nsw.edu.au/fib/proxy.pac` in the **Network Proxy** settings did the trick
 
 ---
