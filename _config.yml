@@ -1,27 +1,43 @@
-### GENERAL SETTINGS ###
-highlighter: rouge
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Random snippets of knowledge
-description: "Random snippets of knowledge"
-analytics: #Google analytics code in the format XX-nnnnnnnn-n
-baseurl: "" #important: start with /
-url: "http://neutmute.github.io"
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: Random Snippets of Knowledge
+email: 
+description: >- # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://blog.turbine51.net" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: 
+github_username:  neutmute
 
 # Build settings
 markdown: kramdown
-permalink: /:year/:month/:day/:title/
-excerpt_separator: <!--more--> #use this in posts to define how long the excerpt of the post (that is shown on the Blog page) is
+theme: minima
+plugins:
+  - jekyll-feed
 
-colors:  #in hex code if not noted else
-  primary: "#22A7F0" 
-  primary_rgb: #"247,0,49" #rgb of the primary. Needed in some places for the transparency effect.  
-  secondary: "#33004D"
-  link: "#428bca"
-  link_hover: "#01b2fe"
-  footer_heading: "#ffffff"
-  footer_content: "#bfc9d3"
-  
-  
-# Short text about your company. Shown in footer on every page and also separately on Home and Contact page.
-about: "Random snippets of knowledge"
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
