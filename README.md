@@ -1,11 +1,10 @@
-# Jekyll CLI
+# neutmute.github.io
+
+## Jekyll CLI
 
 ```
 $env:JEKYLL_VERSION=3.8
 
-
-
-	
 # New blog
 docker run --volume=${PWD}:/srv/jekyll --volume=jekyllbundlecache:/usr/local/bundle jekyll/jekyll jekyll new .
 
