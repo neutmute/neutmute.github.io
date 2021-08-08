@@ -7,7 +7,7 @@ tags:
 - lego
 - fll
 - 
-excerpt: Line Tracking Hints
+excerpt: Line Following Hints
 ---
 
 Spike Prime has a lesson module `Training Camp 3: Reacting to Lines`. As a newcomer to Spike, some things weren't obvious (maybe I should do training camp 1 & 2). Here are my notes.
