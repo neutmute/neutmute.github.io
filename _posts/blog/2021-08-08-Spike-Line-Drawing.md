@@ -10,7 +10,7 @@ tags:
 excerpt: Line Tracking Hints
 ---
 
-Spike Prime has a lesson module `Training Camp 3: Reacting to Lines`. As a newcomer to Spike, some things weren't obvious. Here are my notes.
+Spike Prime has a lesson module `Training Camp 3: Reacting to Lines`. As a newcomer to Spike, some things weren't obvious (maybe I should do training camp 1 & 2). Here are my notes.
 
 ## Start moving at block explained
 
