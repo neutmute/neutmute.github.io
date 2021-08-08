@@ -29,7 +29,7 @@ The two usages in the program flip the left and right power to the wheels and th
 Lesson 05/06 hints to use the reflection block but by default it can't be found in the left hand side panel.
 The lesson has simplified the available blocks. Expose the rest of the blocks using the Lesson toggle switch at the bottom of the panel
 
-![Scripts folder](/assets/img/blog/20210808/drive-on-a-line.png)
+![Scripts folder](/assets/img/blog/20210808/more-blocks.png)
 
 ## Reflection Sensor Block
 
