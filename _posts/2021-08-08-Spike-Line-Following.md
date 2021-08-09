@@ -37,7 +37,7 @@ The reflection sensor block doesn't allow the specification of a colour, it's te
 
 ![Scripts folder](/assets/img/blog/20210808/reflection-block.png)
 
-What does a black surface with with light landing on it?
+What does a black surface do with light landing on it? Reflect or Absorb?
 
 So using this block we no longer have a _black line follower_ but a ... ?
 
