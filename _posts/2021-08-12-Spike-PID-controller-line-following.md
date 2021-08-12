@@ -11,8 +11,9 @@ excerpt: Spike line following with a PID Controller
 ---
 
 A PID Line Follower Python script for Lego Spike.
-This is some code I found on the Internet. 
-It worked up to about `base_power = 60` but any faster than that and it couldn't track
+This is some code I found as a comment on a YouTube video that I'm having trouble finding again. 
+
+It worked up to about `base_power = 60` but any faster than that and it failed - the robot outrunning the speed of the control loop's ability to react.
 
 ```
 from spike import PrimeHub, ColorSensor, MotorPair
