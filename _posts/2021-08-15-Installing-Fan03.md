@@ -110,6 +110,8 @@ Switch switch_fan_bed_master "Fan"              <fan_ceiling> (gFanBedroom) { ch
     }
 ```
 
+# Finished
+
 > Hey Siri, turn on the bedroom light!
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/siri.png)
