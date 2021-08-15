@@ -22,7 +22,7 @@ Next was to install it into the ceiling canopy, except space proved too tight. T
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/ceiling.jpg)
 
-I ordered a Plasterboard jab but realised I could install it into space behind the wall plate.
+I ordered a Plasterboard jab saw but realised I could install it into space behind the wall plate.
 
 First job was to understand and map out the existing wiring so a rollback was possible. Neutral and Earth are omitted as they are all terminated together anyway.
 
@@ -41,7 +41,7 @@ So the new circuit is much simpler
 
 The old dimmer mech is still there, replacing the wallplate is a `TODO` job for later
 
-![Scripts folder](/assets/img//blog/20210815-fan03/after-wiring.png)
+![Scripts folder](/assets/img//blog/20210815-fan03/after-wiring.jpg)
 
 # Configuration
 
