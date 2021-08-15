@@ -18,11 +18,11 @@ The flashing process was straight forward after removing the case and soldering 
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/tasmota.jpg)
 
-Next was to install it into the ceiling canopy, except space proved too tight. The FAN03 didn't fit into the hanger bracket. I thought I might be able to shove it up into the ceiling but the hole for the cable was too small.
+Next was to install it into the ceiling canopy, except space proved too tight. The FAN03 didn't fit into the hanger bracket. I thought I might be able to shove it up into the ceiling but the hole was only big enough for the cable.
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/ceiling.jpg)
 
-So decided to install it into space behind the wall plate.
+I ordered a Plasterboard jab but realised I could install it into space behind the wall plate.
 
 First job was to understand and map out the existing wiring so a rollback was possible. Neutral and Earth are omitted as they are all terminated together anyway.
 
@@ -106,6 +106,8 @@ Switch switch_fan_bed_master "Fan"              <fan_ceiling> (gFanBedroom) { ch
     }
 ```
 
-All done!
+![Scripts folder](/assets/img//blog/20210815-fan03/siri.png)
+
+> Hey Siri, turn on the bedroom light!
 
 ---
