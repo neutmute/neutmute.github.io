@@ -32,6 +32,6 @@ I used a USB 240V --> 5V power plug that conveniently was powered from a cable a
 
 Only one lead of the AC power is router through the relay, stowing away an extra run of cable in that waterproof cable box would take up extra space.
 
-The rest of the setup in Tasmota OpenHab was straight forward and similar to the light setup for the [Sonoff FAN03 project](/2021-08-15-Installing-Fan03.html) 
+The rest of the setup in Tasmota OpenHab was straight forward and similar to the light setup for the [Sonoff FAN03 project](2021-08-15-Installing-Fan03.html) 
 
 ---
