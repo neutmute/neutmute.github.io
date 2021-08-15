@@ -35,7 +35,7 @@ Taking photos helps too
 I wired in the FAN03 downstream of the wall plate switch so that in the event of a Raspberry Pi/OpenHab outage, the light could be turned off.
 The existing speed control needs to be removed from the circuit as we will be using the FAN03's in built one.
 
-So the new diagram is like
+So the new circuit is much simpler
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/new-wiring.png)
 
@@ -45,16 +45,16 @@ Time to switch the light circuit back on and watch for the DHCP lease to get the
 
 ## Sonoff
 
-Using the webconsole, set the hostname and MQTT topic (MQTT hostname and creds not shown)
+Using the webconsole, set the hostname and MQTT topic (Setting MQTT hostname and creds not shown)
 
 ```
 hostname sonoff_masterbed
 topic bedmaster
 ```
 
-Now if the wallswitch off and then someone walks in and wants light, they will turn the light on at the switch expecting the light to come on.
+Now if the wallswitch is off (and SONOFF too) then someone turns the switch onthey will expect the light to come on.
 
-So define a rule to do this at start up, enable it and restart saving the settings.
+So define a Tasmota rule to do this at boot, enable it and restart saving the settings.
 
 ```
 
@@ -67,7 +67,7 @@ Restart 1
 
 ## OpenHab
 
-Define a Thing
+### Define a Thing
 
 * The transform map is to map the 1,2,3 values to ON/OFF for the switch
 
@@ -82,10 +82,10 @@ Define a Thing
 
 ```
 
-Define the Items
+### Define the Items
 
 * TODO: I have named these poorly for automatic Homekit allocation to the correct room
-* The switch type is present as it is required for Homekit integration
+* The `Switch switch_fan_bed_master` is present as it is required for the Apple Homekit integration
 
 
 ```
@@ -96,7 +96,8 @@ Switch switch_fan_bed_master "Fan"              <fan_ceiling> (gFanBedroom) { ch
 
 ```
 
-and then define the sitemap for BasicUI
+### Basic UI Sitemap
+
 
 ```
     Frame label="Bedroom" {   
@@ -105,6 +106,6 @@ and then define the sitemap for BasicUI
     }
 ```
 
-All done, I can now ask Siri to turn my lights off at night.
+All done!
 
 ---
