@@ -14,19 +14,21 @@ The front garden has some 12V lights that are turned off and on by a mechanical 
 
 ![Scripts folder](/assets/img//blog/20210814-garden-lights-sonoff/12vac-transformer.jpg)
 
-The first thing to note is that this is a 12V `AC` transformer so we can't use the relay input to leech power for the controller circuit.
+The first thing to note is that this is a 12V *AC*`* transformer so we can't use the relay input to leech power for the Espy controller.
 
-So following the [Sonoff wiki](https://wiki.iteadstudio.com/Sonoff_SV) I removed the two resistors and prepared a USB cable with female breadboard connectors.
+Following the [Sonoff wiki](https://wiki.iteadstudio.com/Sonoff_SV) I removed the two resistors to isolate the relay and prepared a USB cable with female breadboard connectors.
 
 The sheer thickness of the 12V garden cables was concerning so I beefed up the solder trace for the relay
 
 ![Scripts folder](/assets/img//blog/20210814-garden-lights-sonoff/sonoff-sv.jpg)
 
-After stripping out some 240V wire from a spare kettle power plug, I was concerned about the difference in wire gauge. I checked in with an elec engineer who thought the 12V cable thickness was a legacy of pre-LED lights. He suggested measuring the current draw and it turned out to be negligble, so onward.
+After stripping out some 240V wire from a spare kettle power plug, I was concerned the difference in wire gauge was glaring. I checked in with an elec engineer who thought the 12V cable thickness was a legacy of pre-LED lights and also other factors that shouldn't be a concern for the Sonoff part of the circuit. He suggested measuring the current draw and it turned out to be negligble, so onward.
 
 This is an outoor installation, so a waterproof box is prudent.
 
 ![Scripts folder](/assets/img//blog/20210814-garden-lights-sonoff/waterproof.jpg)
+
+I used a USB 240V --> 5V power plug that conveniently was powered from a cable and fit nicely in the cable box.
 
 The rest of the setup in Tasmota OpenHab was straight forward and similar to the light setup for the [Sonoff FAN03 project](/2021-08-15-Installing-Fan03.html) 
 
