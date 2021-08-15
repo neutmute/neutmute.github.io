@@ -39,6 +39,10 @@ So the new circuit is much simpler
 
 ![Scripts folder](/assets/img//blog/20210815-fan03/new-wiring.png)
 
+The old dimmer mech is still there, replacing the wallplate is a `TODO` job for later
+
+![Scripts folder](/assets/img//blog/20210815-fan03/after-wiring.png)
+
 # Configuration
 
 Time to switch the light circuit back on and watch for the DHCP lease to get the new IP assigned to Tasmota since I forgot to record that earlier.
