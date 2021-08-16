@@ -54,10 +54,10 @@ while True:
     #print(loop_counter)
 ```
 
-* The PID Controller performs better when the sensor supplies a wide range of values - it can adjust the size of it's response based on how 'wrong' the measurement is from where we want it to be. The **reflected light** reading from Spike's sensor can range from around 10% for black and 95% for white surfaces. The **colour sensor** on the othe hand will only report 'Black' or 'White'. This doesn't allow the adjustment to be gradual and is why the reflected light reading is better than the colour reading from the light sensor.
 * The `base_power` is currently set to 30. How much power can you apply before the line following fails?
-* To show how fast the `while` loop is iterating, I added a `loop_counter` and make a beep every 500 times through. How often do you hear it as it counts another 500 times through the loop?
+* To show how fast the `while` loop is iterating, I added a `loop_counter` and make a beep every 500 times through. How often do you hear it as it counts another 500 times through the loop? Can you count to 500 as fast as Spike is testing the colour and making a motor adjustment?
 * The `print()` statement (commented out) sends information back to the Console tab on the Spike app but makes the robot very choppy. This must be a relatively expensive operation which interferes with the feedback loop.
 * While playing with some variables and action, the robot can start behaving erratically as the feedback loop drives the correction higher and higher. The current `Kp, Ki, Kd` variables may be able to be better tuned but that is an advanced topic.
+* The PID Controller performs better when the sensor supplies a wide range of values - the code can adjust the size of it's response (motor power) based on how 'wrong' the measurement is from where we want it to be. The **reflected light** reading from Spike's sensor can range from around 10% for black and 95% for white surfaces, allowing for tiny motor power changes as the sensor drifts away from the line. The **colour sensor** on the other hand will only report 'Black' or 'White'. This doesn't allow the adjustment to be gradual and is why the reflected light reading is better than the colour reading from the light sensor - when coupled with the code to take advantage of it.
 
 ---
