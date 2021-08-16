@@ -11,9 +11,7 @@ excerpt: Spike line following with a PID Controller
 ---
 
 A PID Line Follower Python script for Lego Spike.
-This is some code I found as a comment on a YouTube video that I'm having trouble finding again. 
-
-It worked up to about `base_power = 60` but any faster than that and it failed - the robot outrunning the speed of the control loop's ability to react.
+This is some code I found as a comment on a YouTube video and made some small changes to. 
 
 ```
 from spike import PrimeHub, ColorSensor, MotorPair
@@ -28,7 +26,8 @@ Kd = 1.0
 
 I = 0
 previous_error = 0
-base_power = 40
+base_power = 30
+loop_counter = 0
 
 #hub.left_button.wait_until_pressed()
 
@@ -40,12 +39,24 @@ while True:
     I = I + error
     D = error - previous_error
     previous_error = error
-
+    
     correction = int((P * Kp) + (I * Ki) + (D * Kd))
     left_motor = base_power + correction
     right_motor = base_power - correction
 
     motor_pair.start_tank_at_power(left_motor, right_motor)
+
+    loop_counter += 1
+
+    if loop_counter % 500 == 0 :
+        hub.speaker.beep(60)
+
+    #print(loop_counter)
 ```
+
+* The `base_power` is currently set to 30. How much power can you apply before the line following fails?
+* To show how fast the loop is iterating, I added a `loop_counter` to increment each time around the loop and make a beep every 500 times through. How often do you hear it as it counts another 500 times through the loop?
+* The `print()` statement (commented out) sends information back to the Console tab on the Spike app but makes the robot very choppy. This must be a relatively expensive operation which interferes with the feedback loop.
+* While playing with some variables and action, the robot can start behaving erratically as the feedback loop drives the correction higher and higher. The current `Kp, Ki, Kd` variables may be able to be better tuned but that is an advanced topic.
 
 ---
