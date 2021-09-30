@@ -4,8 +4,8 @@ title: 'Installing a Sonoff FAN03 and integrating with OpenHab'
 categories:
 - blog
 tags: 
-- lego
-- fll
+- sonoff
+- openhab
 - 
 excerpt: Sonoff FAN03
 ---
