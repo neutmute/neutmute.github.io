@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'How to Use Spike Proportional Line Following in Word Blocks'
+title: 'How to use Spike Proportional Line Following in Word Blocks'
 categories:
 - blog
 tags: 
