@@ -55,4 +55,4 @@ This is the relative position of the wheel at the start block and is a positive 
 
 ## How does it work?
 
-This has explained how to use the block. The [next post](../31/Spike-Proportional-Line-Following-Explained.html) explains how it works.
+This has explained how to use the block. The [next post](../../10/01/Spike-Proportional-Line-Following-Explained.html) explains how it works.
