@@ -23,6 +23,8 @@ Implementing PID control in Word Blocks is cumbersome, so here is a proportional
 2. From `My Blocks` in the left hand toolbar, drop in a call to it - as shown in the top right.
 3. Populate the arguments as follows:
 
+![Scripts folder](/assets/img/blog/20210930/args.png)
+
 ### wheelBasePower
 Set this to between 25 and 35 depending on your course. If you go too fast, you may lose track of the line. Too slow is boring but works better on tighter turns.
 

@@ -57,14 +57,16 @@ In order to do this we will apply the motors with a `wheelBasePower` and add a `
 If `differentialPower` is positive, we will drive the left motor faster and turn right. 
 If `differentialPower` is negative, we will drive the right motor faster and turn left.
 
-We apply the calculated TrackPowerLeft and TrackPowerRight to the motors and repeat the above again, all the while steering back toward the `SetPoint` value that we want.
+Apply the calculated `TrackPowerLeft` and `TrackPowerRight` to the motors and repeat, all the while steering back toward the `SetPoint` value that we want.
 
-Now, where was the propotion? We skipped over that but let's address it now. If we are very close to our `setPoint` we don't want to overcorrect and so should apply a light touch on the steering. If however we are far away from our `setPoint` then we should steer more aggressively to get back on track.
+#### Proportional
+
+Now, where was the propotion? We skipped over that but let's address it now. Consider that if we are very close to our `setPoint` we don't want to overcorrect and so should apply a light touch on the steering. If however we are far away from our `setPoint` then we should steer more aggressively to get back on track. Note that this is a decision an action made in 10th's of a second that is then repeated again and again.
 
 What we want is a proportional response and that is obtained when we set
 
 `differentialPower  = Error / errorDrivider`
 
-The `errorDivider` being the number that transforms the measured `error` into a suitable value to apply to the motors. Empirically, we found the best value is about `2.5`
+The `errorDivider` being the number that transforms the measured `error` into a suitable value to apply to the motors. Empirically, we found the best value is about `2.5`. Bringing the value lower so that it makes the steering more agressive doesn't necessairily help accuracy because it makes the bot slew so far off track it loses the edge, sending it into a pirouette over a desert of white.
 
 ---
