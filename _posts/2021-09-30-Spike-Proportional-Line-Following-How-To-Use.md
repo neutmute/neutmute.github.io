@@ -9,24 +9,24 @@ tags:
 excerpt: Spike Line Following
 ---
 
-The default line following sample using colour sensing in Spike wobbles from side to side as it flips from hunting for white and black.
+The default line following sample using the Spike colour sensor wobbles from side to side as it flips from hunting for white and black.
 
-Implementing PID control in Word Blocks is cumbersome, so here is a proportional only follower
+Implementing PID control in Word Blocks is cumbersome, so here is a proportional-only follower.
 
 ![Scripts folder](/assets/img/blog/20210930/line-follow.png)
 
 [Download the LLSP here](/assets/img/blog/20210930/spike-line-following-20210930.llsp)
 
-# How to Use it
+## How to Use it
 
 1. Take the `LineFollow` block and copy/paste it into your project.
 2. From `My Blocks` in the left hand toolbar, drop in a call to it - as shown in the top right.
 3. Populate the arguments as follows
 
-## wheelBasePower
+### wheelBasePower
 Set this to between 25 and 35 depending on your course. If you go too fast, you may lose track of the line. Too slow is boring but works better on tighter turns.
 
-## errorDivider
+### errorDivider
 
 Set this to about `±2.5`. 
 
@@ -38,13 +38,17 @@ The bigger the value, it will make smaller more subtle turns.
 
 Turn too agressively and it will turn itself right off the edge. Too slow and it may not navigate a tight turn!
 
-## cameraLetter
+### cameraLetter
 
 Leave the `of` operand as `CD`
 Set the letter value 1 for Port C.
 Set the letter value 2 for Port D.
 
-## until
+### until
 
 How far you want the bot to travel before stopping. 
 This is the relative position of the wheel at the start block
+
+## How does it work?
+
+See the [next post](Spike-Proportional-Line-Following-Explained.html) for a description 
