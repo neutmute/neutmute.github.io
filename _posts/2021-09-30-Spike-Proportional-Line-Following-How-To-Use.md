@@ -1,25 +1,27 @@
 ---
 layout: post
-title: 'Spike Proportional Line Following in Word Blocks - Explained'
+title: 'How to Use Spike Proportional Line Following in Word Blocks'
 categories:
 - blog
 tags: 
 - lego
 - fll
-- 
 excerpt: Spike Line Following
 ---
 
 The default line following sample using colour sensing in Spike wobbles from side to side as it flips from hunting for white and black.
 
-The project hints at using reflectivity so here my solution
+Implementing PID control in Word Blocks is cumbersome, so here is a proportional only follower
 
-Here is the full shot
 ![Scripts folder](/assets/img/blog/20210930/line-follow.png)
 
-Download the LLSP here ![Scripts folder](/assets/img/blog/20210930/spike-line-following-20210930.llsp)
+[Download the LLSP here](/assets/img/blog/20210930/spike-line-following-20210930.llsp)
 
 # How to Use it
+
+1. Take the `LineFollow` block and copy/paste it into your project.
+2. From `My Blocks` in the left hand toolbar, drop in a call to it - as shown in the top right.
+3. Populate the arguments as follows
 
 <table class="table table-striped">
 <thead>
@@ -31,12 +33,16 @@ Download the LLSP here ![Scripts folder](/assets/img/blog/20210930/spike-line-fo
 <tbody>
 <tr>
 <td>wheelBasePower</td>
-<td>Set this to between 25 and 30. If you go to fast, you may lose track of the line</td>
+<td>Set this to between 25 and 35 depending on your course. If you go too fast, you may lose track of the line. Too slow is boring but works better on tighter turns.</td>
 </tr>
 <tr>
 <td>errorDivider</td>
 <td>
-Set this to about 2.5. Feel free to experiment, changing the values by 0.1 at a time.
+Set this to about +/-2.5. 
+Make it +2.5 to track the left edge.
+Make it -2.5 to track the right edge.
+
+Feel free to experiment, changing the value by 0.1 at a time.
 The smaller the value, the more agressively the bot will turn to get back on track.
 The bigger the value, it will make smaller more subtle turns.
 
