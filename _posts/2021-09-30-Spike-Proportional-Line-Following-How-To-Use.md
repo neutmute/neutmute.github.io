@@ -40,7 +40,7 @@ The bigger the value, it will make smaller more subtle turns.
 
 Turn too agressively and it will turn itself right off the edge. Too slow and it may not navigate a tight turn!
 
-### cameraLetter
+### lightSensorPort
 
 Set the letter value `1` for Port C.
 
