@@ -14,7 +14,7 @@ The IKEA Praktlysing blind is part of the smart home range from IKEA. This is ho
 Out of the box, the blind and remote worked fine. Trying to join it to my Zigbee mesh was was very frustrating though. These were the final steps used after many factory resets (maybe a factory reset is needed beforehand).
 
 1. Put Zigbee2MQTT into `Permit Join` mode
-2. Repater: Press reset pin for 5 seconds+. The light does not change at all
+2. Repeater: Press reset pin for 5 seconds+. The light does not change at all
     1. Wait for Zigbee2MQTT to interview device and confirm
     1. The Repeater is now open for 2 minutes to join the blind and remote, so keep going with the next steps straight after.
 3. Remote: Press pairing button 4x. It starts flashing red, does it's thing and joins.
