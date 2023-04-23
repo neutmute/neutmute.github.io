@@ -70,7 +70,7 @@ when
     Item blind_hallway_proxy received command 
 then "value"
      
-    logInfo("Blind", String::format("Shutter command=%s", receivedCommand))
+    logInfo("Blind", String::format("Shutter Blind command=%s", receivedCommand))
 
     val mqttActions = getActions("mqtt","mqtt:broker:PiMqttBroker")
     val blindTopic = "zigbee2mqtt/zb-hallway-blind/set"
@@ -80,17 +80,14 @@ then "value"
     {
         case STOP:
         {
-            logInfo("Blind", String::format("Shutter stop", receivedCommand))
             newState = "STOP"
         } 
         case UP:
         {
-            logInfo("Blind", String::format("Shutter UP", receivedCommand))
             newState = "OPEN"
         }
         case DOWN:
         {
-            logInfo("Blind", String::format("Shutter DOWN", receivedCommand))
             newState = "CLOSE"
         }
     }
