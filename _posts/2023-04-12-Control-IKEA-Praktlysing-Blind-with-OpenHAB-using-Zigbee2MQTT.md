@@ -1,11 +1,11 @@
-   
+---
 layout: post
-title: 'Controll an IKEA Praktlysing Blind with OpenHAB using Zigbee2MQTT'
+title: 'Control an IKEA Praktlysing Blind with OpenHAB using Zigbee2MQTT'
 categories:
   blog
-tags: 
-
 excerpt: Using Zigbee2MQTT to control an IKEA Praktlysing blind from OpenHab
+---
+
    
 The IKEA Praktlysing blind is part of the smart home range from IKEA. This is how I connected it to OpenHAB _without_ using the Tradfri gateway.
 
@@ -60,7 +60,8 @@ Rollershutter blind_hallway_proxy "Hallway Blind"
 
 ## Rule - Manual Control
 
-Building a JSON payload as per https://www.zigbee2mqtt.io/devices/E2102.html.
+Building a JSON payload as per [zigbee2mqtt.io](https://www.zigbee2mqtt.io/devices/E2102.html).
+
 Because I wanted to send a state and not a position, this seemed the best way, sending the MQTT message direct from the rule.
 
 ```
