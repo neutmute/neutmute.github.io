@@ -13,7 +13,7 @@ How I integrated my AirGradient pro kit with OpenHAB
 
 There are a lot of forks of AirGradient's sample code but none were exactly what I needed to integrate into my OpenHAB setup so I started a clean fork and cherry picked/adjusted to keep it as close to AirGradient's reference implementation as possible
 
-https://github.com/airgradienthq/arduino/compare/master...neutmute:arduino:master
+[/compare/master...neutmute:arduino:master](https://github.com/airgradienthq/arduino/compare/master...neutmute:arduino:master)
 
 With these changes, I can now browse to my AirGradient device IP and receive the data in JSON
 
@@ -39,7 +39,7 @@ Thing http:url:airgradient "AirGradient" [
         Type number : pm10 "PM 10" [ stateTransformation="JSONPATH:$.pm10" ]
         Type number : pm02 "PM 0.2" [ stateTransformation="JSONPATH:$.pm02" ]
         Type number : pm02Aqi "PM 0.2 AQI" [ stateTransformation="JSONPATH:$.pm02_aqi" ]
-        //Type number : tvoc_index "TVOC Index" [ stateTransformation="JSONPATH:$.tvoc_index" ]
+        //Type number : tvoc_index "TVOC Index" [ stateTransformation="JSONPATH:$.tvoc_index" ] // I don't have the TVOC module
         Type number : nox "NOX" [ stateTransformation="JSONPATH:$.nox_index" ]
         Type number : temperature "Temperature" [ stateTransformation="JSONPATH:$.atmp" ]
         Type number : humidity "Humidity" [ stateTransformation="JSONPATH:$.rhum" ]
