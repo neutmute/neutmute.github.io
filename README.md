@@ -2,15 +2,13 @@
 
 ## Jekyll CLI
 
-```
-$env:JEKYLL_VERSION=3.8
+```bash
+# Serve locally with live reload (visit http://localhost:4000)
+./serve.sh
 
-# New blog
-docker run --volume=${PWD}:/srv/jekyll --volume=jekyllbundlecache:/usr/local/bundle jekyll/jekyll jekyll new .
+# Build only
+./build.sh
 
-# build
-docker run --rm --volume="${PWD}:/srv/jekyll" -it jekyll/jekyll jekyll build
-
-# serve & watch
-docker run --name myblog --volume="${PWD}:/srv/jekyll" -p 4000:4000 -it jekyll/jekyll jekyll serve --watch --drafts
+# New blog (one-off)
+docker run --volume="$(pwd):/srv/jekyll" --volume=jekyllbundlecache:/usr/local/bundle jekyll/jekyll:3.8 jekyll new .
 ```
