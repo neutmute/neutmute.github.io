@@ -5,4 +5,4 @@ docker run --name myblog \
   --volume="$(pwd):/srv/jekyll" \
   --volume="jekyll-bundle-cache:/usr/local/bundle" \
   -p 4000:4000 -it jekyll/jekyll:pages \
-  jekyll serve --watch --drafts
+  sh -c "apk add --no-cache build-base cmake >/dev/null 2>&1 && jekyll serve --watch --drafts"
