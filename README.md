@@ -10,5 +10,5 @@
 ./build.sh
 
 # New blog (one-off)
-docker run --volume="$(pwd):/srv/jekyll" --volume=jekyllbundlecache:/usr/local/bundle jekyll/jekyll:3.8 jekyll new .
+docker run --volume="$(pwd):/srv/jekyll" --volume=jekyll-bundle-cache:/usr/local/bundle jekyll/jekyll:pages jekyll new .
 ```
